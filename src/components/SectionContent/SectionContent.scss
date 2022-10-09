@@ -1,0 +1,11 @@
+.section-content {
+  display: flex;
+
+  .section-pages {
+    flex: 1;
+  }
+
+  .page-content {
+    flex: 3;
+  }
+}

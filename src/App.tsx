@@ -1,16 +1,16 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import './App.scss';
+import { SectionContent } from "./components/SectionContent";
+import { Sections } from "./components/Sections";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Here I will provide notes
-        </p>
+    <div className="sencha-app">
+      <header className="sections">
+        <Sections/>
       </header>
+
+      <SectionContent />
     </div>
   );
 }

@@ -1,0 +1,20 @@
+%flex-initial {
+  display: flex;
+}
+
+.flex {
+  @extend %flex-initial;
+
+  &-align-items-center {
+    @extend %flex-initial;
+    align-items: center;
+  }
+}
+
+@mixin flex-x-list {
+  @for $i from 1 through 12 {
+      .flex-#{$i} { flex: $i; }
+  }
+}
+
+@include flex-x-list;
