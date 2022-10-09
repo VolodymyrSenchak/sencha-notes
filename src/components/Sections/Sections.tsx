@@ -1,8 +1,13 @@
 import { PlusCircleFilled, PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addSection, fetchSections } from "../../store/sectionsReducer";
 
 export const Sections: React.FC = () => {
+  const count = useAppSelector((state) => state.sections.sections);
+  const dispatch = useAppDispatch();
+
   const [currentKey, setCurrentKey] = useState('');
   const sectionsNavItems: MenuProps['items'] = [];
 
@@ -11,9 +16,14 @@ export const Sections: React.FC = () => {
     setCurrentKey(e.key);
   };
 
+  useEffect(() => {
+    dispatch(fetchSections());
+  }, []);
+
   const addNewSection = async () => {
     const tempName = new Date().toISOString();
-    //
+    
+    dispatch(addSection({ name: tempName }));
   };
 
   return (
