@@ -1,24 +1,20 @@
 import { Menu, MenuProps } from "antd";
 import { useState } from "react";
+import { SectionPage } from "../../../models";
 
-const navigationItems: MenuProps['items']  = [
-  {
-    label: 'First Page',
-    key: '1',
-  },
-  {
-    label: 'Second Page',
-    key: '2',
-  }
-]
+export interface ISectionPages {
+  selectedPage: SectionPage;
+  pages: SectionPage[];
+  onPageSelected: (page: SectionPage) => void;
+}
 
-export const SectionPages: React.FC = () => {
-  const [currentKey, setCurrentKey] = useState('1');
+export const SectionPages: React.FC<ISectionPages> = ({ selectedPage, pages, onPageSelected }) => {
+  const navItems: MenuProps['items'] = pages.map(p => ({ label: p.name, key: p.name }));
 
   const onClick: MenuProps['onClick'] = e => {
-    console.log('click ', e);
-    setCurrentKey(e.key);
+    const selectedPage = pages.find(p => p.name === e.key);
+    onPageSelected(selectedPage!);
   };
 
-  return <Menu mode="vertical" onClick={onClick} selectedKeys={[currentKey]} items={navigationItems}></Menu>;
+  return <Menu mode="vertical" onClick={onClick} selectedKeys={[selectedPage.name]} items={navItems}></Menu>;
 }

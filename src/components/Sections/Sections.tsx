@@ -1,29 +1,33 @@
-import { PlusCircleFilled, PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
-import { useEffect, useState } from "react";
+import { Section } from "../../models";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { addSection, fetchSections } from "../../store/sectionsReducer";
+import { addSection } from "../../store/sectionsReducer";
+import './Sections.scss';
 
-export const Sections: React.FC = () => {
-  const count = useAppSelector((state) => state.sections.sections);
+export interface ISections {
+  onSectionSelected: (section: Section) => void;
+  selectedSection: Section;
+}
+
+export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSection }) => {
+  const sections = useAppSelector((state) => state.sections.sections);
   const dispatch = useAppDispatch();
 
-  const [currentKey, setCurrentKey] = useState('');
-  const sectionsNavItems: MenuProps['items'] = [];
+  const sectionsNavItems: MenuProps["items"] = sections.map((s) => ({
+    label: s.name,
+    key: s.name,
+  }));
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
-    setCurrentKey(e.key);
+    const section = sections.find(s => s.name === e.key);
+    onSectionSelected(section!);
   };
-
-  useEffect(() => {
-    dispatch(fetchSections());
-  }, []);
 
   const addNewSection = async () => {
     const tempName = new Date().toISOString();
-    
-    dispatch(addSection({ name: tempName }));
+
+    dispatch(addSection({ name: tempName, pages: [] }));
   };
 
   return (
@@ -31,9 +35,9 @@ export const Sections: React.FC = () => {
       <Menu
         mode="horizontal"
         onClick={onClick}
-        selectedKeys={[currentKey]}
+        selectedKeys={[selectedSection.name]}
         items={sectionsNavItems}
-        className='flex-1'
+        className="flex-1"
       ></Menu>
       <Button
         type="text"

@@ -1,4 +1,5 @@
-import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Section } from "../models";
 import { RootState } from "./store";
 
 // Define a type for the slice state
@@ -6,13 +7,17 @@ interface SectionsState {
   sections: Section[];
 }
 
-interface Section {
-  name: string;
-}
-
 // Define the initial state using that type
 const initialState: SectionsState = {
-  sections: [],
+  sections: [
+    {
+      name: "Initial section",
+      pages: [
+        { name: "First page", content: { text: "some text" } },
+        { name: "Second page", content: { text: "some text" } },
+      ],
+    },
+  ],
 };
 
 export const sectionsSlice = createSlice({
@@ -42,11 +47,11 @@ export const selectSections = (state: RootState) => state.sections.sections;
 
 export default sectionsSlice.reducer;
 
-export const fetchSections =
-  () => async (dispatch: Dispatch<PayloadAction<Section[]>>) => {
-    try {
-      setTimeout(() => {
-        dispatch(getSectionsSuccess([{ name: "volo" }]));
-      });
-    } catch (e) {}
-  };
+// export const fetchSections =
+//   () => async (dispatch: Dispatch<PayloadAction<Section[]>>) => {
+//     try {
+//       setTimeout(() => {
+//         dispatch(getSectionsSuccess([{ name: "volo" }]));
+//       });
+//     } catch (e) {}
+//   };
