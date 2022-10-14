@@ -1,11 +1,26 @@
-.section-content {
-  display: flex;
+.section-details {
+  height: 100%;
 
-  .section-pages {
-    flex: 1;
-  }
+  .section-content {
+    display: flex;
+    height: 100%;
+  
+    .section-pages {
+      flex: 1;
+      max-width: 20rem;
 
-  .page-content {
-    flex: 3;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      &-menu {
+        height: 0;
+        flex: 1;
+      }
+    }
+  
+    .page-content {
+      flex: 3;
+    }
   }
 }

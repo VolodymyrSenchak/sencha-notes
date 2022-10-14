@@ -7,7 +7,7 @@ import { NewSection } from "./components/Sections/NewSection";
 import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { addSection } from "./store/sectionsReducer";
+import { addSection, deleteSection } from "./store/sectionsReducer";
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
@@ -15,9 +15,10 @@ function App() {
 
   const sections = useAppSelector((state) => state.sections.sections);
   const dispatch = useAppDispatch();
-  const selectedSection = sections.find(s => s.name === selectedSectionName);
+  const selectedSection = sections.find((s) => s.name === selectedSectionName);
 
-  const onSectionSelected = (selected: string) => setSelectedSectionName(selected);
+  const onSectionSelected = (selected: string) =>
+    setSelectedSectionName(selected);
   const openNewSectionModal = () => setAddSectionOpened(true);
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
@@ -28,6 +29,15 @@ function App() {
 
     setSelectedSectionName(newSection.name);
     closeNewSectionModal();
+  };
+
+  const handleSectionDelete = () => {
+    const existingSections = sections.filter(s => s !== selectedSection);
+    dispatch(deleteSection(selectedSection!));
+
+    if (existingSections.length > 0) {
+      setSelectedSectionName(existingSections[0].name);
+    }
   };
 
   useInitEffect(() => {
@@ -41,7 +51,7 @@ function App() {
       <div className="sencha-app">
         {!!selectedSection ? (
           <>
-            <header className="sections">
+            <header className="sencha-app-header">
               <Sections
                 onAddSection={openNewSectionModal}
                 onSectionSelected={onSectionSelected}
@@ -49,7 +59,9 @@ function App() {
               />
             </header>
 
-            <SectionContent section={selectedSection} />
+            <main className="sencha-app-content">
+              <SectionContent section={selectedSection} onDeleteSection={handleSectionDelete} />
+            </main>
           </>
         ) : (
           <Button onClick={openNewSectionModal}>Add your first notes</Button>

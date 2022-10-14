@@ -1,6 +1,15 @@
-import { CloseCircleTwoTone } from "@ant-design/icons";
-import { Button, Typography } from "antd";
-import { useState } from "react";
+import {
+  CloseCircleTwoTone,
+  DeleteFilled,
+  EditFilled,
+  EditTwoTone,
+  FrownOutlined,
+  PlusCircleFilled,
+  PlusCircleTwoTone,
+  PlusSquareFilled,
+} from "@ant-design/icons";
+import { Button, Popconfirm, Typography } from "antd";
+import { useEffect, useState } from "react";
 import { useInitEffect } from "../../hooks/useInitEffect";
 import {
   Section,
@@ -10,20 +19,32 @@ import {
 import { useAppDispatch } from "../../store/hooks";
 import { editSection } from "../../store/sectionsReducer";
 import { NewPageModal } from "./NewPageModal";
+import { SectionActions } from "./SectionActions";
 import "./SectionContent.scss";
 import { SectionPageContent } from "./SectionPageContent";
 import { SectionPages } from "./SectionPages";
 
 export interface ISectionContent {
   section: Section;
+  onDeleteSection: () => void;
 }
 
-export const SectionContent: React.FC<ISectionContent> = ({ section }) => {
+export const SectionContent: React.FC<ISectionContent> = ({
+  section,
+  onDeleteSection,
+}) => {
   const [isAddPageOpened, setAddPageOpened] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<SectionPage>(section.pages[0]);
   const dispatch = useAppDispatch();
 
-  const existingPageNames = section.pages.map((p) => p.name);
+  const { name } = section;
+
+  useEffect(() => {
+    if (section.pages.length > 0) {
+      setCurrentPage(section.pages[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name]);
 
   const closeAddPageModal = () => setAddPageOpened(false);
   const openAddPageModal = () => setAddPageOpened(true);
@@ -43,12 +64,14 @@ export const SectionContent: React.FC<ISectionContent> = ({ section }) => {
   const onPageContentChanged = (content: SectionPageContentModel) => {
     const newPageState: SectionPage = { ...currentPage, content };
 
-    dispatch(editSection({
-      ...section,
-      pages: section.pages.map((p) =>
-        p.name === newPageState.name ? newPageState : p
-      ),
-    }));
+    dispatch(
+      editSection({
+        ...section,
+        pages: section.pages.map((p) =>
+          p.name === newPageState.name ? newPageState : p
+        ),
+      })
+    );
 
     setCurrentPage(newPageState);
   };
@@ -59,21 +82,21 @@ export const SectionContent: React.FC<ISectionContent> = ({ section }) => {
         <section className="section-details">
           <div className="section-content">
             <div className="section-pages">
-              <SectionPages
-                selectedPage={currentPage!}
-                pages={section.pages}
-                onPageSelected={(page) => setCurrentPage(page)}
-              />
-              <Button
-                onClick={openAddPageModal}
-                className="width-full margin-bottom-1"
-              >
-                Add new page
-              </Button>
-              <Button className="width-full" danger>
-                Delete this section
-              </Button>
+              <div className="section-pages-menu">
+                <SectionPages
+                  selectedPage={currentPage!}
+                  pages={section.pages}
+                  onPageSelected={(page) => setCurrentPage(page)}
+                />
+              </div>
+
+              <SectionActions
+                onAddNewPage={openAddPageModal}
+                onDeleteThisSection={onDeleteSection}
+                onEditThisSection={() => {}}
+              ></SectionActions>
             </div>
+
             <div className="page-content">
               <SectionPageContent
                 pageContent={currentPage.content}
@@ -84,14 +107,25 @@ export const SectionContent: React.FC<ISectionContent> = ({ section }) => {
         </section>
       ) : (
         <section className="section-details">
-          <div>There are no pages yet</div>
-          <Button onClick={openAddPageModal}>Add new page</Button>
+          <div className="flex-column flex-align-items-center height-full flex-justify-content-center">
+            <FrownOutlined
+              className="margin-bottom-1"
+              style={{ fontSize: "5rem" }}
+              size={64}
+            />
+            <Typography.Title level={4}>
+              There are no pages yet
+            </Typography.Title>
+            <Button size="large" type="primary" onClick={openAddPageModal}>
+              Add new page
+            </Button>
+          </div>
         </section>
       )}
 
       <NewPageModal
         isModalOpened={isAddPageOpened}
-        existingPagesNames={existingPageNames}
+        existingPagesNames={section.pages.map((p) => p.name)}
         cancel={closeAddPageModal}
         submit={addNewPage}
       ></NewPageModal>
