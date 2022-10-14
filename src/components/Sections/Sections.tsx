@@ -1,18 +1,17 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import { Section } from "../../models";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { addSection } from "../../store/sectionsReducer";
+import { useAppSelector } from "../../store/hooks";
 import './Sections.scss';
 
 export interface ISections {
-  onSectionSelected: (section: Section) => void;
   selectedSection: Section;
+  onAddSection: () => void;
+  onSectionSelected: (section: Section) => void;
 }
 
-export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSection }) => {
+export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSection, onAddSection }) => {
   const sections = useAppSelector((state) => state.sections.sections);
-  const dispatch = useAppDispatch();
 
   const sectionsNavItems: MenuProps["items"] = sections.map((s) => ({
     label: s.name,
@@ -24,12 +23,6 @@ export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSecti
     onSectionSelected(section!);
   };
 
-  const addNewSection = async () => {
-    const tempName = new Date().toISOString();
-
-    dispatch(addSection({ name: tempName, pages: [] }));
-  };
-
   return (
     <div className="flex-align-items-center">
       <Menu
@@ -39,10 +32,11 @@ export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSecti
         items={sectionsNavItems}
         className="flex-1"
       ></Menu>
+
       <Button
         type="text"
         title="Add new section"
-        onClick={addNewSection}
+        onClick={onAddSection}
         icon={<PlusCircleOutlined />}
       ></Button>
     </div>
