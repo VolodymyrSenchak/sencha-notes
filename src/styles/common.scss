@@ -17,4 +17,28 @@
   }
 }
 
+.width {
+  &-full {
+    width: 100%;
+  }
+}
+
+.margin {
+  @for $i from 1 through 25 {
+    &-bottom-#{$i} { margin-bottom: #{$i}rem; }
+  }
+
+  @for $i from 1 through 25 {
+    &-top-#{$i} { margin-top: #{$i}rem; }
+  }
+
+  @for $i from 1 through 25 {
+    &-left-#{$i} { margin-left: #{$i}rem; }
+  }
+
+  @for $i from 1 through 25 {
+    &-right-#{$i} { margin-right: #{$i}rem; }
+  }
+}
+
 @include flex-x-list;

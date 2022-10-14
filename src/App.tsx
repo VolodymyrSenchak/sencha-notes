@@ -10,46 +10,46 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { addSection } from "./store/sectionsReducer";
 
 function App() {
-  const sections = useAppSelector((state) => state.sections.sections);
-  const [section, setSection] = useState<Section>();
+  const [selectedSectionName, setSelectedSectionName] = useState<string>();
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
+
+  const sections = useAppSelector((state) => state.sections.sections);
   const dispatch = useAppDispatch();
+  const selectedSection = sections.find(s => s.name === selectedSectionName);
 
-  const onSectionSelected = (selected: Section) => setSection(selected);
-
-  const openNewSectionModal = () => {
-    setAddSectionOpened(true);
-  };
+  const onSectionSelected = (selected: string) => setSelectedSectionName(selected);
+  const openNewSectionModal = () => setAddSectionOpened(true);
+  const closeNewSectionModal = () => setAddSectionOpened(false);
 
   const handleNewSectionAdded = (name: string) => {
     const newSection: Section = { name, pages: [] };
 
     dispatch(addSection(newSection));
 
-    setSection(newSection);
-    setAddSectionOpened(false);
+    setSelectedSectionName(newSection.name);
+    closeNewSectionModal();
   };
 
   useInitEffect(() => {
     if (sections.length > 0) {
-      setSection(sections[0]);
+      setSelectedSectionName(sections[0].name);
     }
   });
 
   return (
     <>
       <div className="sencha-app">
-        {!!section ? (
+        {!!selectedSection ? (
           <>
             <header className="sections">
               <Sections
                 onAddSection={openNewSectionModal}
                 onSectionSelected={onSectionSelected}
-                selectedSection={section}
+                selectedSection={selectedSection}
               />
             </header>
 
-            <SectionContent section={section} />
+            <SectionContent section={selectedSection} />
           </>
         ) : (
           <Button onClick={openNewSectionModal}>Add your first notes</Button>
@@ -58,7 +58,7 @@ function App() {
 
       <NewSection
         isModalOpened={isAddSectionOpened}
-        cancel={() => setAddSectionOpened(false)}
+        cancel={closeNewSectionModal}
         submit={handleNewSectionAdded}
       ></NewSection>
     </>

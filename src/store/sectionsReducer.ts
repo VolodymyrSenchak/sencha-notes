@@ -28,6 +28,9 @@ export const sectionsSlice = createSlice({
     addSection: (state, action: PayloadAction<Section>) => {
       state.sections = [...state.sections, action.payload];
     },
+    editSection: (state, action: PayloadAction<Section>) => {
+      state.sections = state.sections.map(s => s.name === action.payload.name ? action.payload : s);
+    },
     deleteSection: (state, action: PayloadAction<Section>) => {
       state.sections = state.sections.filter(
         (s) => s.name !== action.payload.name
@@ -39,7 +42,7 @@ export const sectionsSlice = createSlice({
   },
 });
 
-export const { addSection, deleteSection, getSectionsSuccess } =
+export const { addSection, deleteSection, getSectionsSuccess, editSection } =
   sectionsSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

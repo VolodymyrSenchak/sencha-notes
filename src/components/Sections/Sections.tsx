@@ -7,7 +7,7 @@ import './Sections.scss';
 export interface ISections {
   selectedSection: Section;
   onAddSection: () => void;
-  onSectionSelected: (section: Section) => void;
+  onSectionSelected: (sectionName: string) => void;
 }
 
 export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSection, onAddSection }) => {
@@ -19,8 +19,7 @@ export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSecti
   }));
 
   const onClick: MenuProps["onClick"] = (e) => {
-    const section = sections.find(s => s.name === e.key);
-    onSectionSelected(section!);
+    onSectionSelected(e.key);
   };
 
   return (
