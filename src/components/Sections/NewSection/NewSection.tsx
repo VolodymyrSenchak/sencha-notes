@@ -28,6 +28,7 @@ export const NewSection: React.FC<INewSection> = ({
     <Modal
       open={isModalOpened}
       title="Create new section"
+      width={350}
       footer={null}
       maskClosable={false}
       onCancel={cancel}
@@ -59,12 +60,12 @@ export const NewSection: React.FC<INewSection> = ({
             },
           ]}
         >
-          <Input />
+          <Input size="large" />
         </Form.Item>
 
         <Form.Item>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" size="large" htmlType="submit">
               Save Section
             </Button>
           </div>

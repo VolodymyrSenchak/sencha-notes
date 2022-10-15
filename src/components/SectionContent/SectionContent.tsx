@@ -1,29 +1,16 @@
-import {
-  CloseCircleTwoTone,
-  DeleteFilled,
-  EditFilled,
-  EditTwoTone,
-  FrownOutlined,
-  PlusCircleFilled,
-  PlusCircleTwoTone,
-  PlusSquareFilled,
-} from "@ant-design/icons";
-import { Button, Popconfirm, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import { useInitEffect } from "../../hooks/useInitEffect";
 import {
   Section,
   SectionPage,
-  SectionPageContent as SectionPageContentModel,
 } from "../../models";
 import { useAppDispatch } from "../../store/hooks";
 import { editSection } from "../../store/sectionsReducer";
-import { NewPageModal } from "./NewPageModal";
 import { SectionActions } from "./SectionActions";
 import "./SectionContent.scss";
 import { SectionPageContent } from "./SectionPageContent";
 import { SectionPages } from "./SectionPages";
+import { SectionWithoutPages } from "./SectionWithoutPages";
 
 export interface ISectionContent {
   section: Section;
@@ -34,7 +21,6 @@ export const SectionContent: React.FC<ISectionContent> = ({
   section,
   onDeleteSection,
 }) => {
-  const [isAddPageOpened, setAddPageOpened] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<SectionPage>(section.pages[0]);
   const dispatch = useAppDispatch();
 
@@ -47,11 +33,8 @@ export const SectionContent: React.FC<ISectionContent> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
-  const closeAddPageModal = () => setAddPageOpened(false);
-  const openAddPageModal = () => setAddPageOpened(true);
-
-  const addNewPage = (name: string) => {
-    const newPage: SectionPage = { id: v4(), name, content: { text: "" } };
+  const addNewPage = () => {
+    const newPage: SectionPage = { id: v4(), name: "", content: { text: "" } };
     const newSection: Section = {
       ...section,
       pages: [...section.pages, newPage],
@@ -59,12 +42,9 @@ export const SectionContent: React.FC<ISectionContent> = ({
 
     dispatch(editSection(newSection));
     setCurrentPage(newPage);
-    closeAddPageModal();
   };
 
-  const onPageContentChanged = (content: SectionPageContentModel) => {
-    const newPageState: SectionPage = { ...currentPage, content };
-
+  const onPageContentChanged = (newPageState: SectionPage) => {
     dispatch(
       editSection({
         ...section,
@@ -92,7 +72,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
               </div>
 
               <SectionActions
-                onAddNewPage={openAddPageModal}
+                onAddNewPage={addNewPage}
                 onDeleteThisSection={onDeleteSection}
                 onEditThisSection={() => {}}
               ></SectionActions>
@@ -100,36 +80,17 @@ export const SectionContent: React.FC<ISectionContent> = ({
 
             <div className="page-content">
               <SectionPageContent
-                pageContent={currentPage.content}
-                onPageContentChanged={onPageContentChanged}
+                page={currentPage}
+                onPageChanged={onPageContentChanged}
               />
             </div>
           </div>
         </section>
       ) : (
         <section className="section-details">
-          <div className="flex-column flex-align-items-center height-full flex-justify-content-center">
-            <FrownOutlined
-              className="margin-bottom-1"
-              style={{ fontSize: "5rem" }}
-              size={64}
-            />
-            <Typography.Title level={4}>
-              There are no pages yet
-            </Typography.Title>
-            <Button size="large" type="primary" onClick={openAddPageModal}>
-              Add new page
-            </Button>
-          </div>
+          <SectionWithoutPages onAddNewPage={addNewPage}></SectionWithoutPages>
         </section>
       )}
-
-      <NewPageModal
-        isModalOpened={isAddPageOpened}
-        existingPagesNames={section.pages.map((p) => p.name)}
-        cancel={closeAddPageModal}
-        submit={addNewPage}
-      ></NewPageModal>
     </>
   );
 };

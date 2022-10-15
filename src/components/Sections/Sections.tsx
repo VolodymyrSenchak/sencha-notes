@@ -2,7 +2,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import { Section } from "../../models";
 import { useAppSelector } from "../../store/hooks";
-import './Sections.scss';
+import "./Sections.scss";
 
 export interface ISections {
   selectedSection: Section;

@@ -8,7 +8,7 @@ import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { addSection, deleteSection } from "./store/sectionsReducer";
-import { v4 } from 'uuid';
+import { v4 } from "uuid";
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
@@ -24,7 +24,11 @@ function App() {
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
   const handleNewSectionAdded = (name: string) => {
-    const newSection: Section = { id: v4(), name, pages: [] };
+    const newSection: Section = {
+      id: v4(),
+      name,
+      pages: [{ id: v4(), name: "", content: { text: "" } }],
+    };
 
     dispatch(addSection(newSection));
 
@@ -33,7 +37,7 @@ function App() {
   };
 
   const handleSectionDelete = () => {
-    const existingSections = sections.filter(s => s !== selectedSection);
+    const existingSections = sections.filter((s) => s !== selectedSection);
     dispatch(deleteSection(selectedSection!));
 
     if (existingSections.length > 0) {
@@ -46,6 +50,53 @@ function App() {
       setSelectedSectionName(sections[0].name);
     }
   });
+
+  // useInitEffect(() => {
+  //   const request = indexedDB.open("SectionsDB", 2);
+    
+  //   request.onerror = (event) => {}; // Handle errors. };
+
+  //   request.onsuccess = (event: any) => {
+  //     const db = event.target!.result as IDBDatabase;
+  //     const sectionsStore = db.transaction("sections", "readwrite").objectStore("sections");
+
+  //     const countRequest = sectionsStore.count();
+
+  //     countRequest.onsuccess = (ev: any) => console.log("count", countRequest.result);
+
+  //     // sections.forEach((customer) => {
+  //     //   customerObjectStore.add(customer);
+  //     // });
+
+  //     const ddd = sectionsStore.get("d113c0c1-cd14-4069-a5d3-3379111d1fc2");
+
+  //     ddd.onsuccess = (event: any) => {
+  //       console.log(ddd.result);
+  //     };
+  //   }
+
+  //   request.onupgradeneeded = (event: any) => {
+  //     const db = event.target!.result as IDBDatabase;
+    
+  //     // Create an objectStore to hold information about our customers. We're
+  //     // going to use "ssn" as our key path because it's guaranteed to be
+  //     // unique - or at least that's what I was told during the kickoff meeting.
+  //     const objectStore = db.createObjectStore("sections", { keyPath: "id" });
+    
+  //     // Use transaction oncomplete to make sure the objectStore creation is
+  //     // finished before adding data into it.
+  //     objectStore.transaction.oncomplete = (event: any) => {
+  //             // Store values in the newly created objectStore.
+  //       const sectionsStore = db.transaction("sections", "readwrite").objectStore("sections");
+
+  //       sections.forEach((customer) => {
+  //         sectionsStore.add(customer);
+  //       });
+
+  //       sectionsStore.transaction.commit();
+  //     };
+  //   };
+  // });
 
   return (
     <>
@@ -61,7 +112,10 @@ function App() {
             </header>
 
             <main className="sencha-app-content">
-              <SectionContent section={selectedSection} onDeleteSection={handleSectionDelete} />
+              <SectionContent
+                section={selectedSection}
+                onDeleteSection={handleSectionDelete}
+              />
             </main>
           </>
         ) : (

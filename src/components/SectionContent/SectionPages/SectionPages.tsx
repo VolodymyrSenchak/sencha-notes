@@ -1,5 +1,4 @@
 import { Menu, MenuProps } from "antd";
-import { useState } from "react";
 import { SectionPage } from "../../../models";
 
 export interface ISectionPages {
@@ -8,13 +7,27 @@ export interface ISectionPages {
   onPageSelected: (page: SectionPage) => void;
 }
 
-export const SectionPages: React.FC<ISectionPages> = ({ selectedPage, pages, onPageSelected }) => {
-  const navItems: MenuProps['items'] = pages.map(p => ({ label: p.name, key: p.name }));
+export const SectionPages: React.FC<ISectionPages> = ({
+  selectedPage,
+  pages,
+  onPageSelected,
+}) => {
+  const navItems: MenuProps["items"] = pages.map((p) => ({
+    label: p.name || "Untitled",
+    key: p.id,
+  }));
 
-  const onClick: MenuProps['onClick'] = e => {
-    const selectedPage = pages.find(p => p.name === e.key);
-    onPageSelected(selectedPage!);
+  const onClick: MenuProps["onClick"] = (e) => {
+    const newSelection = pages.find((p) => p.id === e.key);
+    onPageSelected(newSelection!);
   };
 
-  return <Menu mode="vertical" onClick={onClick} selectedKeys={[selectedPage.name]} items={navItems}></Menu>;
-}
+  return (
+    <Menu
+      mode="vertical"
+      onClick={onClick}
+      selectedKeys={[selectedPage.id]}
+      items={navItems}
+    ></Menu>
+  )
+};
