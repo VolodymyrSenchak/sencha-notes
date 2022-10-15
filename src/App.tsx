@@ -8,6 +8,7 @@ import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { addSection, deleteSection } from "./store/sectionsReducer";
+import { v4 } from 'uuid';
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
@@ -23,7 +24,7 @@ function App() {
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
   const handleNewSectionAdded = (name: string) => {
-    const newSection: Section = { name, pages: [] };
+    const newSection: Section = { id: v4(), name, pages: [] };
 
     dispatch(addSection(newSection));
 

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { v4 } from "uuid";
 import { Section } from "../models";
 import { RootState } from "./store";
 
@@ -11,10 +12,11 @@ interface SectionsState {
 const initialState: SectionsState = {
   sections: [
     {
+      id: v4(),
       name: "Initial section",
       pages: [
-        { name: "First page", content: { text: "some text" } },
-        { name: "Second page", content: { text: "some text" } },
+        { id: v4(), name: "First page", content: { text: "some text" } },
+        { id: v4(), name: "Second page", content: { text: "some text" } },
       ],
     },
   ],

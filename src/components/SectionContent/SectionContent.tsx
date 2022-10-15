@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Popconfirm, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { v4 } from "uuid";
 import { useInitEffect } from "../../hooks/useInitEffect";
 import {
   Section,
@@ -50,7 +51,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
   const openAddPageModal = () => setAddPageOpened(true);
 
   const addNewPage = (name: string) => {
-    const newPage: SectionPage = { name, content: { text: "" } };
+    const newPage: SectionPage = { id: v4(), name, content: { text: "" } };
     const newSection: Section = {
       ...section,
       pages: [...section.pages, newPage],
@@ -68,7 +69,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
       editSection({
         ...section,
         pages: section.pages.map((p) =>
-          p.name === newPageState.name ? newPageState : p
+          p.id === newPageState.id ? newPageState : p
         ),
       })
     );
