@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.scss";
 import { SectionContent } from "./components/SectionContent";
 import { Sections } from "./components/Sections";
@@ -7,7 +7,7 @@ import { NewSection } from "./components/Sections/NewSection";
 import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { addSection, deleteSection } from "./store/sectionsReducer";
+import { addSection, deleteSection, getSections } from "./store/sectionsReducer";
 import { v4 } from "uuid";
 
 function App() {
@@ -23,80 +23,44 @@ function App() {
   const openNewSectionModal = () => setAddSectionOpened(true);
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
-  const handleNewSectionAdded = (name: string) => {
+  const handleNewSectionAdded = async (name: string) => {
     const newSection: Section = {
       id: v4(),
       name,
       pages: [{ id: v4(), name: "", content: { text: "" } }],
     };
 
-    dispatch(addSection(newSection));
+    await dispatch(addSection(newSection));
 
     setSelectedSectionName(newSection.name);
     closeNewSectionModal();
   };
 
-  const handleSectionDelete = () => {
+  const handleSectionDelete = async () => {
     const existingSections = sections.filter((s) => s !== selectedSection);
-    dispatch(deleteSection(selectedSection!));
+    await dispatch(deleteSection(selectedSection!));
 
     if (existingSections.length > 0) {
       setSelectedSectionName(existingSections[0].name);
     }
   };
 
+  //TODO: there are some problems here.
   useInitEffect(() => {
-    if (sections.length > 0) {
-      setSelectedSectionName(sections[0].name);
-    }
+    (async () => {
+      await dispatch(getSections());
+    })();
+    
+    // if (sections.length > 0) {
+    //   setSelectedSectionName(sections[0].name);
+    // }
   });
 
-  // useInitEffect(() => {
-  //   const request = indexedDB.open("SectionsDB", 2);
-    
-  //   request.onerror = (event) => {}; // Handle errors. };
-
-  //   request.onsuccess = (event: any) => {
-  //     const db = event.target!.result as IDBDatabase;
-  //     const sectionsStore = db.transaction("sections", "readwrite").objectStore("sections");
-
-  //     const countRequest = sectionsStore.count();
-
-  //     countRequest.onsuccess = (ev: any) => console.log("count", countRequest.result);
-
-  //     // sections.forEach((customer) => {
-  //     //   customerObjectStore.add(customer);
-  //     // });
-
-  //     const ddd = sectionsStore.get("d113c0c1-cd14-4069-a5d3-3379111d1fc2");
-
-  //     ddd.onsuccess = (event: any) => {
-  //       console.log(ddd.result);
-  //     };
-  //   }
-
-  //   request.onupgradeneeded = (event: any) => {
-  //     const db = event.target!.result as IDBDatabase;
-    
-  //     // Create an objectStore to hold information about our customers. We're
-  //     // going to use "ssn" as our key path because it's guaranteed to be
-  //     // unique - or at least that's what I was told during the kickoff meeting.
-  //     const objectStore = db.createObjectStore("sections", { keyPath: "id" });
-    
-  //     // Use transaction oncomplete to make sure the objectStore creation is
-  //     // finished before adding data into it.
-  //     objectStore.transaction.oncomplete = (event: any) => {
-  //             // Store values in the newly created objectStore.
-  //       const sectionsStore = db.transaction("sections", "readwrite").objectStore("sections");
-
-  //       sections.forEach((customer) => {
-  //         sectionsStore.add(customer);
-  //       });
-
-  //       sectionsStore.transaction.commit();
-  //     };
-  //   };
-  // });
+  useEffect(() => {
+    if (sections.length > 0 && selectedSectionName === undefined) {
+      setSelectedSectionName(sections[0].name);
+    }
+  }, [selectedSectionName, sections]);
 
   return (
     <>
