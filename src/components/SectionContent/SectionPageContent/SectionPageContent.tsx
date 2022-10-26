@@ -1,16 +1,21 @@
-import { Input } from "antd";
+import { DeleteFilled } from "@ant-design/icons";
+import { Button, Input } from "antd";
 import JoditEditor from "jodit-react";
 import { SectionPage } from "../../../models";
 import { JOBIT_EDITOR_CONFIG } from "./jobitEditorConfig";
 
 export interface ISectionPageContent {
   page: SectionPage;
+  isPageDeleteAllowed: boolean;
   onPageChanged: (page: SectionPage) => void;
+  onPageDelete: (page: SectionPage) => void;
 }
 
 export const SectionPageContent: React.FC<ISectionPageContent> = ({
   page,
+  isPageDeleteAllowed,
   onPageChanged,
+  onPageDelete,
 }) => {
   const onContentChanged = (text: string) =>
     onPageChanged({ ...page, content: { text } });
@@ -20,7 +25,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
 
   return (
     <div className="section-page-content height-full flex-column">
-      <div className="section-page-content-name">
+      <div className="section-page-content-name flex-align-items-center">
         <Input
           placeholder="Enter page name here"
           size="large"
@@ -28,6 +33,16 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
           value={page.name}
           onChange={(e) => onSectionNameChanged(e.target.value)}
         ></Input>
+
+        <Button
+          type="text"
+          size="large"
+          title="Delete this page"
+          disabled={!isPageDeleteAllowed}
+          icon={<DeleteFilled />}
+          danger
+          onClick={() => onPageDelete(page)}
+        ></Button>
       </div>
 
       <div className="height-stub flex-1">

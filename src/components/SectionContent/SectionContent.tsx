@@ -30,14 +30,21 @@ export const SectionContent: React.FC<ISectionContent> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
-  const addNewPage = () => {
-    const index = Math.max(section.pages.length);
-    const newPage: SectionPage = {
+  const dispatchEditSection = (newSectionState: Section) => {
+    dispatch(editSection(newSectionState));
+  };
+
+  const createNewEmptyPage = (index: number): SectionPage => {
+    return {
       id: v4(),
       name: "",
       content: { text: "" },
       index,
     };
+  };
+
+  const addNewPage = () => {
+    const newPage = createNewEmptyPage(Math.max(section.pages.length));
     const newSection: Section = {
       ...section,
       pages: [...section.pages, newPage],
@@ -48,25 +55,32 @@ export const SectionContent: React.FC<ISectionContent> = ({
   };
 
   const onPageContentChanged = (newPageState: SectionPage) => {
-    dispatch(
-      editSection({
-        ...section,
-        pages: section.pages.map((p) =>
-          p.id === newPageState.id ? newPageState : p
-        ),
-      })
-    );
+    dispatchEditSection({
+      ...section,
+      pages: section.pages.map((p) =>
+        p.id === newPageState.id ? newPageState : p
+      ),
+    });
 
     setCurrentPage(newPageState);
   };
 
   const onPagesOrderChanged = (newPagesState: SectionPage[]) => {
-    dispatch(
-      editSection({
-        ...section,
-        pages: newPagesState,
-      })
-    );
+    dispatchEditSection({
+      ...section,
+      pages: newPagesState,
+    });
+  };
+
+  const onPageDelete = (page: SectionPage) => {
+    const newState = {
+      ...section,
+      pages: section.pages.filter((p) => p.id !== page.id),
+    };
+    const newSelectedPage = newState.pages[0];
+
+    dispatchEditSection(newState);
+    setCurrentPage(newSelectedPage);
   };
 
   return (
@@ -94,7 +108,9 @@ export const SectionContent: React.FC<ISectionContent> = ({
             <div className="page-content">
               <SectionPageContent
                 page={currentPage}
+                isPageDeleteAllowed={section.pages.length > 1}
                 onPageChanged={onPageContentChanged}
+                onPageDelete={onPageDelete}
               />
             </div>
           </div>
