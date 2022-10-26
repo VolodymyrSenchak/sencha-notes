@@ -27,7 +27,7 @@ function App() {
     const newSection: Section = {
       id: v4(),
       name,
-      pages: [{ id: v4(), name: "", content: { text: "" } }],
+      pages: [{ id: v4(), name: "", content: { text: "" }, index: 0 }],
     };
 
     await dispatch(addSection(newSection));

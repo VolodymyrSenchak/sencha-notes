@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import {
-  Section,
-  SectionPage,
-} from "../../models";
+import { Section, SectionPage } from "../../models";
 import { useAppDispatch } from "../../store/hooks";
 import { editSection } from "../../store/sectionsReducer";
 import { SectionActions } from "./SectionActions";
@@ -34,7 +31,13 @@ export const SectionContent: React.FC<ISectionContent> = ({
   }, [name]);
 
   const addNewPage = () => {
-    const newPage: SectionPage = { id: v4(), name: "", content: { text: "" } };
+    const index = Math.max(section.pages.length);
+    const newPage: SectionPage = {
+      id: v4(),
+      name: "",
+      content: { text: "" },
+      index,
+    };
     const newSection: Section = {
       ...section,
       pages: [...section.pages, newPage],
@@ -57,6 +60,15 @@ export const SectionContent: React.FC<ISectionContent> = ({
     setCurrentPage(newPageState);
   };
 
+  const onPagesOrderChanged = (newPagesState: SectionPage[]) => {
+    dispatch(
+      editSection({
+        ...section,
+        pages: newPagesState,
+      })
+    );
+  };
+
   return (
     <>
       {section.pages.length > 0 ? (
@@ -68,6 +80,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
                   selectedPage={currentPage!}
                   pages={section.pages}
                   onPageSelected={(page) => setCurrentPage(page)}
+                  onPagesOrderChanged={onPagesOrderChanged}
                 />
               </div>
 

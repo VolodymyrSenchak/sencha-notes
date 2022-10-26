@@ -8,6 +8,7 @@ export interface SectionPage {
   id: string;
   name: string;
   content: SectionPageContent;
+  index: number;
 }
 
 export interface SectionPageContent {

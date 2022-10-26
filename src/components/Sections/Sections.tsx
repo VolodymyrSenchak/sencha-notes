@@ -10,7 +10,11 @@ export interface ISections {
   onSectionSelected: (sectionName: string) => void;
 }
 
-export const Sections: React.FC<ISections> = ({ onSectionSelected, selectedSection, onAddSection }) => {
+export const Sections: React.FC<ISections> = ({
+  onSectionSelected,
+  selectedSection,
+  onAddSection,
+}) => {
   const sections = useAppSelector((state) => state.sections.sections);
 
   const sectionsNavItems: MenuProps["items"] = sections.map((s) => ({

@@ -1,18 +1,23 @@
 import { Menu, MenuProps } from "antd";
 import { SectionPage } from "../../../models";
+import ReactDragListView from "react-drag-listview";
+import { orderBy } from "lodash";
 
 export interface ISectionPages {
   selectedPage: SectionPage;
   pages: SectionPage[];
   onPageSelected: (page: SectionPage) => void;
+  onPagesOrderChanged: (pages: SectionPage[]) => void;
 }
 
 export const SectionPages: React.FC<ISectionPages> = ({
   selectedPage,
   pages,
   onPageSelected,
+  onPagesOrderChanged
 }) => {
-  const navItems: MenuProps["items"] = pages.map((p) => ({
+  const orderedPages = orderBy(pages, p => p.index);
+  const navItems: MenuProps["items"] = orderedPages.map((p) => ({
     label: p.name || "Untitled",
     key: p.id,
   }));
@@ -22,12 +27,30 @@ export const SectionPages: React.FC<ISectionPages> = ({
     onPageSelected(newSelection!);
   };
 
+  const dragProps = {
+    onDragEnd(fromIndex: number, toIndex: number) {
+      if (toIndex === -1) return;
+
+      const newOrderedPages = pages.map(page => {
+        if (page.index === fromIndex) return { ...page, index: toIndex };
+        if (page.index === toIndex) return { ...page, index: fromIndex };
+        return { ...page };
+      });
+
+      onPagesOrderChanged(newOrderedPages);
+    },
+    handleSelector: "li",
+    nodeSelector: "li"
+  };
+
   return (
-    <Menu
-      mode="vertical"
-      onClick={onClick}
-      selectedKeys={[selectedPage.id]}
-      items={navItems}
-    ></Menu>
-  )
+    <ReactDragListView {...dragProps}>
+      <Menu
+        mode="vertical"
+        onClick={onClick}
+        selectedKeys={[selectedPage.id]}
+        items={navItems}
+      ></Menu>
+    </ReactDragListView>
+  );
 };
