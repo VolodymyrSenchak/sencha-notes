@@ -3,6 +3,7 @@ import { Button, Input } from "antd";
 import JoditEditor from "jodit-react";
 import { SectionPage } from "../../../models";
 import { JOBIT_EDITOR_CONFIG } from "./jobitEditorConfig";
+import "./SectionPageContent.scss";
 
 export interface ISectionPageContent {
   page: SectionPage;
@@ -27,6 +28,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
     <div className="section-page-content height-full flex-column">
       <div className="section-page-content-name flex-align-items-center">
         <Input
+          className="page-title-editor"
           placeholder="Enter page name here"
           size="large"
           bordered={false}

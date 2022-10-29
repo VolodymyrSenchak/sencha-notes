@@ -7,7 +7,7 @@ import { NewSection } from "./components/Sections/NewSection";
 import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { addSection, deleteSection, getSections } from "./store/sectionsReducer";
+import { addSection, deleteSection, initSections } from "./store/sectionsReducer";
 import { v4 } from "uuid";
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
 
   const sections = useAppSelector((state) => state.sections.sections);
+  const isLoading = useAppSelector((state) => state.sections.isSectionsLoading);
   const dispatch = useAppDispatch();
   const selectedSection = sections.find((s) => s.name === selectedSectionName);
 
@@ -45,15 +46,10 @@ function App() {
     }
   };
 
-  //TODO: there are some problems here.
   useInitEffect(() => {
     (async () => {
-      await dispatch(getSections());
+      await dispatch(initSections());
     })();
-    
-    // if (sections.length > 0) {
-    //   setSelectedSectionName(sections[0].name);
-    // }
   });
 
   useEffect(() => {
@@ -61,6 +57,10 @@ function App() {
       setSelectedSectionName(sections[0].name);
     }
   }, [selectedSectionName, sections]);
+
+  if (isLoading) {
+    return (<div className="sencha-app">Initializing your app...</div>);
+  }
 
   return (
     <>

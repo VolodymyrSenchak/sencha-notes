@@ -5,7 +5,7 @@ const sectionsStore = "sections";
 
 const dbPromise = openDB("notesDB", 1, {
   upgrade(db) {
-    db.createObjectStore("sections", { keyPath: "id" });
+    db.createObjectStore(sectionsStore, { keyPath: "id" });
   },
 });
 

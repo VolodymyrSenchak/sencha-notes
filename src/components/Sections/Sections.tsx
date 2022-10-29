@@ -27,7 +27,7 @@ export const Sections: React.FC<ISections> = ({
   };
 
   return (
-    <div className="flex-align-items-center">
+    <div className="flex-align-items-center sections-menu">
       <Menu
         mode="horizontal"
         onClick={onClick}
