@@ -9,6 +9,9 @@ import { Section } from "./models";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { addSection, deleteSection, initSections } from "./store/sectionsReducer";
 import { v4 } from "uuid";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
@@ -63,7 +66,7 @@ function App() {
   }
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <div className="sencha-app">
         {!!selectedSection ? (
           <>
@@ -92,7 +95,7 @@ function App() {
         cancel={closeNewSectionModal}
         submit={handleNewSectionAdded}
       ></NewSection>
-    </>
+    </QueryClientProvider>
   );
 }
 
