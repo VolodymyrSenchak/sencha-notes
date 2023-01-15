@@ -4,31 +4,21 @@ import { Button, Popconfirm } from "antd";
 export interface ISectionActions {
   onAddNewPage: () => void;
   onDeleteThisSection: () => void;
-  onEditThisSection: () => void;
 }
 
 export const SectionActions: React.FC<ISectionActions> = ({
   onAddNewPage,
   onDeleteThisSection,
-  onEditThisSection
 }) => {
   return (
-    <div>
+    <div className="flex-column">
       <Button
-        type="text"
-        size="large"
+        type="default"
+        size="middle"
         title="Add new page"
         icon={<PlusCircleTwoTone />}
         onClick={onAddNewPage}
-      ></Button>
-
-      <Button
-        type="text"
-        size="large"
-        title="Edit this section"
-        onClick={onEditThisSection}
-        icon={<EditTwoTone color="#ececec" />}
-      ></Button>
+      >Add new page</Button>
       
       <Popconfirm
         title="Are you sure to delete this section?"
@@ -37,12 +27,12 @@ export const SectionActions: React.FC<ISectionActions> = ({
         cancelText="Cancel"
       >
         <Button
-          type="text"
-          size="large"
-          title="Delete this section"
+          type="default"
+          size="middle"
+          title="Delete section"
           icon={<DeleteFilled />}
           danger
-        ></Button>
+        >Delete section</Button>
       </Popconfirm>
     </div>
   );

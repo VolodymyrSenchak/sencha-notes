@@ -20,7 +20,6 @@ function App() {
     isLoading
   } = useQuery(queryKeys.sections, sectionsService.getSections, {
     onSuccess: (loaded) => {
-      console.log("on successsssss");
       if (loaded.length > 0 && selectedSectionName === undefined) {
         setSelectedSectionName(loaded[0].name);
       }
@@ -39,7 +38,8 @@ function App() {
     const newSection: Section = {
       id: v4(),
       name,
-      pages: [{ id: v4(), name: "", content: { text: "" }, index: sections!.length }],
+      pages: [{ id: v4(), name: "", content: { text: "" }, index: 0 }],
+      createdAt: new Date(),
     };
 
     await addSectionMutator.mutateAsync(newSection);
@@ -62,8 +62,8 @@ function App() {
   }
 
   return (
-    <div>
-<div className="sencha-app">
+    <>
+      <div className="sencha-app">
         {!!selectedSection ? (
           <>
             <header className="sencha-app-header">
@@ -91,7 +91,7 @@ function App() {
         cancel={closeNewSectionModal}
         submit={handleNewSectionAdded}
       ></NewSection>
-    </div>
+    </>
   );
 }
 

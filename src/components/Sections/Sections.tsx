@@ -1,5 +1,6 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
+import { orderBy } from "lodash";
 import { useQuery } from "react-query";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
@@ -18,8 +19,8 @@ export const Sections: React.FC<ISections> = ({
   onAddSection,
 }) => {
   const sectionsQuery = useQuery(queryKeys.sections, sectionsService.getSections);
-
-  const sectionsNavItems: MenuProps["items"] = sectionsQuery.data?.map((s) => ({
+  const orderedSections = orderBy(sectionsQuery?.data || [], s => s.createdAt);
+  const sectionsNavItems: MenuProps["items"] = orderedSections.map((s) => ({
     label: s.name,
     key: s.name,
   }));

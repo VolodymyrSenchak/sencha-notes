@@ -18,7 +18,7 @@ export const useSectionsData = () => {
 
   const deleteSectionMutator = useMutation({
     mutationFn: (key: string) => sectionsService.deleteSection(key),
-    onSuccess: () => queryClient.resetQueries(queryKeys.sections),
+    onSuccess: () => queryClient.removeQueries(queryKeys.sections),
   });
 
   const addSectionMutator = useMutation({

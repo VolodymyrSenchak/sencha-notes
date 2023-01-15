@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
 import { Section, SectionPage } from "../../models";
@@ -43,10 +43,7 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
 
   const addNewPage = async () => {
     const newPage = createNewEmptyPage(Math.max(sectionPages.length));
-    const newSection: Section = {
-      ...section!,
-      pages: [...sectionPages, newPage],
-    };
+    const newSection: Section = { ...section!, pages: [...sectionPages, newPage] };
 
     await editSectionMutator.mutateAsync(newSection);
     setCurrentPage(newPage);
@@ -66,10 +63,7 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
   };
 
   const handlePageDeletion = async (page: SectionPage) => {
-    const newState = {
-      ...section!,
-      pages: section!.pages.filter((p) => p.id !== page.id),
-    };
+    const newState = { ...section!, pages: section!.pages.filter((p) => p.id !== page.id) };
 
     await editSectionMutator.mutateAsync(newState);
 

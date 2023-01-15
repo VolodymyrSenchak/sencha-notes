@@ -2,7 +2,7 @@
 export const JOBIT_EDITOR_CONFIG: any = {
   readonly: false,
   placeholder: "Start typings...",
-  height: 500,
+  height: 507,
   allowResizeX: false,
   allowResizeY: false,
   buttons:
