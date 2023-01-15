@@ -1,29 +1,37 @@
 import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
 import { v4 } from "uuid";
+import { useSectionsData } from "../../hooks/useSectionsData";
 import { Section, SectionPage } from "../../models";
-import { useAppDispatch } from "../../store/hooks";
-import { editSection } from "../../store/sectionsReducer";
+import { queryKeys } from "../../services/queryKeys";
+import { sectionsService } from "../../services/sectionsService";
 
 interface IUseSectionContent {
-  section: Section;
+  sectionId: string;
 }
 
-export const useSectionContent = ({ section }: IUseSectionContent) => {
-  const [currentPage, setCurrentPage] = useState<SectionPage>(section.pages[0]);
-  const dispatch = useAppDispatch();
+export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
+  const sectionQuery = useQuery(
+    {
+      queryKey: [queryKeys.sections, sectionId],
+      queryFn: () => sectionsService.getSection(sectionId),
+    }
+  );
 
-  const { name } = section;
+  const section = sectionQuery.data;
+  const sectionPages = section?.pages || [];
+
+  const [currentPage, setCurrentPage] = useState<SectionPage>(sectionPages[0]);
+  const sectionName = section?.name;
+
+  const { editSectionMutator } = useSectionsData();
 
   useEffect(() => {
-    if (section.pages.length > 0) {
-      setCurrentPage(section.pages[0]);
+    if (sectionPages.length > 0) {
+      setCurrentPage(sectionPages[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
-
-  const dispatchEditSection = (newSectionState: Section) => {
-    dispatch(editSection(newSectionState));
-  };
+  }, [sectionName]);
 
   const createNewEmptyPage = (index: number): SectionPage => {
     return { id: v4(), name: "", content: { text: "" }, index };
@@ -33,41 +41,44 @@ export const useSectionContent = ({ section }: IUseSectionContent) => {
     setCurrentPage(page);
   } 
 
-  const addNewPage = () => {
-    const newPage = createNewEmptyPage(Math.max(section.pages.length));
+  const addNewPage = async () => {
+    const newPage = createNewEmptyPage(Math.max(sectionPages.length));
     const newSection: Section = {
-      ...section,
-      pages: [...section.pages, newPage],
+      ...section!,
+      pages: [...sectionPages, newPage],
     };
 
-    dispatch(editSection(newSection));
+    await editSectionMutator.mutateAsync(newSection);
     setCurrentPage(newPage);
   };
 
-  const handlePageContentChanged = (newPage: SectionPage) => {
-    dispatchEditSection({
-      ...section,
-      pages: section.pages.map((p) => (p.id === newPage.id ? newPage : p)),
+  const handlePageContentChanged = async (newPage: SectionPage) => {
+    await editSectionMutator.mutateAsync({
+      ...section!,
+      pages: section!.pages.map((p) => (p.id === newPage.id ? newPage : p)),
     });
 
     setCurrentPage(newPage);
   };
 
-  const handlePagesOrderChanged = (pages: SectionPage[]) => {
-    dispatchEditSection({ ...section, pages });
+  const handlePagesOrderChanged = async (pages: SectionPage[]) => {
+    await editSectionMutator.mutateAsync({ ...section!, pages });
   };
 
-  const handlePageDeletion = (page: SectionPage) => {
+  const handlePageDeletion = async (page: SectionPage) => {
     const newState = {
-      ...section,
-      pages: section.pages.filter((p) => p.id !== page.id),
+      ...section!,
+      pages: section!.pages.filter((p) => p.id !== page.id),
     };
 
-    dispatchEditSection(newState);
+    await editSectionMutator.mutateAsync(newState);
+
     setCurrentPage(newState.pages[0]);
   };
 
   return {
+    section,
+    sectionPages,
     currentPage,
     changeCurrentPage,
     addNewPage,

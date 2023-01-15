@@ -1,5 +1,7 @@
 import { Button, Form, Input, Modal } from "antd";
-import { useAppSelector } from "../../../store/hooks";
+import { useQuery } from "react-query";
+import { queryKeys } from "../../../services/queryKeys";
+import { sectionsService } from "../../../services/sectionsService";
 
 export interface INewSection {
   isModalOpened: boolean;
@@ -16,7 +18,7 @@ export const NewSection: React.FC<INewSection> = ({
   cancel,
   submit,
 }) => {
-  const sections = useAppSelector((state) => state.sections.sections);
+  const { data: sections } = useQuery(queryKeys.sections, sectionsService.getSections);
 
   const onFinish = (data: NewSectionFormData) => {
     submit(data.sectionName);
@@ -47,7 +49,7 @@ export const NewSection: React.FC<INewSection> = ({
             {
               validator: (_, value) => {
                 if (
-                  sections.some(
+                  sections!.some(
                     (s) => s.name.toLowerCase() === value.toLowerCase()
                   )
                 ) {

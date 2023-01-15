@@ -48,7 +48,7 @@ export const SectionPages: React.FC<ISectionPages> = ({
       <Menu
         mode="vertical"
         onClick={onClick}
-        selectedKeys={[selectedPage.id]}
+        selectedKeys={selectedPage ? [selectedPage.id] : []}
         items={navItems}
       ></Menu>
     </ReactDragListView>

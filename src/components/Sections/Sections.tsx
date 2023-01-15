@@ -2,7 +2,8 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import { useQuery } from "react-query";
 import { Section } from "../../models";
-import { useAppSelector } from "../../store/hooks";
+import { queryKeys } from "../../services/queryKeys";
+import { sectionsService } from "../../services/sectionsService";
 import "./Sections.scss";
 
 export interface ISections {
@@ -11,20 +12,12 @@ export interface ISections {
   onSectionSelected: (sectionName: string) => void;
 }
 
-export function getSections(): Promise<Array<Section>> {
-  return Promise.resolve<Section[]>([
-    {id: "343", name: "zalupa", pages: []  }
-  ]);
-}
-
 export const Sections: React.FC<ISections> = ({
   onSectionSelected,
   selectedSection,
   onAddSection,
 }) => {
-  const sections = useAppSelector((state) => state.sections.sections);
-
-  const sectionsQuery = useQuery("sections", getSections);
+  const sectionsQuery = useQuery(queryKeys.sections, sectionsService.getSections);
 
   const sectionsNavItems: MenuProps["items"] = sectionsQuery.data?.map((s) => ({
     label: s.name,

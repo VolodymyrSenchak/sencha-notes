@@ -1,29 +1,37 @@
 import { Button } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.scss";
 import { SectionContent } from "./components/SectionContent";
 import { Sections } from "./components/Sections";
 import { NewSection } from "./components/Sections/NewSection";
-import { useInitEffect } from "./hooks/useInitEffect";
 import { Section } from "./models";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { addSection, deleteSection, initSections } from "./store/sectionsReducer";
 import { v4 } from "uuid";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
+import { useQuery } from "react-query";
+import { queryKeys } from "./services/queryKeys";
+import { sectionsService } from "./services/sectionsService";
+import { useSectionsData } from "./hooks/useSectionsData";
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
 
-  const sections = useAppSelector((state) => state.sections.sections);
-  const isLoading = useAppSelector((state) => state.sections.isSectionsLoading);
-  const dispatch = useAppDispatch();
-  const selectedSection = sections.find((s) => s.name === selectedSectionName);
+  const {
+    data: sections,
+    isLoading
+  } = useQuery(queryKeys.sections, sectionsService.getSections, {
+    onSuccess: (loaded) => {
+      console.log("on successsssss");
+      if (loaded.length > 0 && selectedSectionName === undefined) {
+        setSelectedSectionName(loaded[0].name);
+      }
+    }
+  });
 
-  const onSectionSelected = (selected: string) =>
-    setSelectedSectionName(selected);
+  const { addSectionMutator, deleteSectionMutator } = useSectionsData();
+
+  const selectedSection = sections?.find((s) => s.name === selectedSectionName);
+
+  const onSectionSelected = (selected: string) => setSelectedSectionName(selected);
   const openNewSectionModal = () => setAddSectionOpened(true);
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
@@ -31,43 +39,31 @@ function App() {
     const newSection: Section = {
       id: v4(),
       name,
-      pages: [{ id: v4(), name: "", content: { text: "" }, index: 0 }],
+      pages: [{ id: v4(), name: "", content: { text: "" }, index: sections!.length }],
     };
 
-    await dispatch(addSection(newSection));
+    await addSectionMutator.mutateAsync(newSection);
 
     setSelectedSectionName(newSection.name);
     closeNewSectionModal();
   };
 
   const handleSectionDelete = async () => {
-    const existingSections = sections.filter((s) => s !== selectedSection);
-    await dispatch(deleteSection(selectedSection!));
+    const existingSections = sections!.filter((s) => s !== selectedSection);
+    await deleteSectionMutator.mutateAsync(selectedSection?.id!);
 
     if (existingSections.length > 0) {
       setSelectedSectionName(existingSections[0].name);
     }
   };
 
-  useInitEffect(() => {
-    (async () => {
-      await dispatch(initSections());
-    })();
-  });
-
-  useEffect(() => {
-    if (sections.length > 0 && selectedSectionName === undefined) {
-      setSelectedSectionName(sections[0].name);
-    }
-  }, [selectedSectionName, sections]);
-
   if (isLoading) {
     return (<div className="sencha-app">Initializing your app...</div>);
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="sencha-app">
+    <div>
+<div className="sencha-app">
         {!!selectedSection ? (
           <>
             <header className="sencha-app-header">
@@ -80,7 +76,7 @@ function App() {
 
             <main className="sencha-app-content">
               <SectionContent
-                section={selectedSection}
+                sectionId={selectedSection?.id}
                 onDeleteSection={handleSectionDelete}
               />
             </main>
@@ -95,7 +91,7 @@ function App() {
         cancel={closeNewSectionModal}
         submit={handleNewSectionAdded}
       ></NewSection>
-    </QueryClientProvider>
+    </div>
   );
 }
 

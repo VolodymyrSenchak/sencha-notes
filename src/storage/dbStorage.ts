@@ -27,17 +27,18 @@ export class DbStoreTable<T> {
     return (await this.dbPromise).getAll(this.tableName);
   }
 
-  async insert(val: T): Promise<string> {
+  async insert(val: T): Promise<[string, T]> {
     const key = await (await this.dbPromise).add(this.tableName, val);
-    return key as string;
+    return [key as string, val];
   }
 
-  async update(key: string, val: T): Promise<string> {
+  async update(key: string, val: T): Promise<[string, T]> {
     await (await this.dbPromise).put(this.tableName, val);
-    return key;
+    return [key, val];
   }
 
-  async delete(key: string): Promise<void> {
-    return (await this.dbPromise).delete(this.tableName, key);
+  async delete(key: string): Promise<string> {
+    await (await this.dbPromise).delete(this.tableName, key);
+    return key;
   }
 }
