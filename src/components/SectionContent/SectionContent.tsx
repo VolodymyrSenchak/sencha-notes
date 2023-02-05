@@ -1,4 +1,8 @@
-import { DeleteFilled, PlusCircleTwoTone } from "@ant-design/icons";
+import {
+  DeleteFilled,
+  PlusCircleTwoTone,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Button, Popconfirm } from "antd";
 import { SectionActions } from "./SectionActions";
 import "./SectionContent.scss";
@@ -29,16 +33,6 @@ export const SectionContent: React.FC<ISectionContent> = ({
     <section className="section-details">
       <div className="section-content">
         <div className="section-pages flex-column">
-          <Button
-            type="default"
-            size="middle"
-            title="Add new page"
-            icon={<PlusCircleTwoTone />}
-            onClick={addNewPage}
-          >
-            Add new page
-          </Button>
-
           <div className="section-pages-menu flex-1">
             <SectionPages
               selectedPage={currentPage!}
@@ -48,22 +42,35 @@ export const SectionContent: React.FC<ISectionContent> = ({
             />
           </div>
 
-          <Popconfirm
-            title="Are you sure to delete this section?"
-            onConfirm={onDeleteSection}
-            okText="Delete"
-            cancelText="Cancel"
-          >
+          <div className="flex-justify-content-end flex-align-items-center width-full ">
             <Button
-              type="default"
+              type="primary"
               size="middle"
-              title="Delete section"
-              icon={<DeleteFilled />}
-              danger
+              shape="circle"
+              title="Add new page"
+              className="margin-right-1"
+              icon={<PlusOutlined />}
+              onClick={addNewPage}
+              style={{ height: "40px", width: "40px" }}
+            ></Button>
+
+            <Popconfirm
+              title="Are you sure to delete this section?"
+              onConfirm={onDeleteSection}
+              okText="Delete"
+              cancelText="Cancel"
             >
-              Delete section
-            </Button>
-          </Popconfirm>
+              <Button
+                type="primary"
+                size="large"
+                shape="circle"
+                className="margin-right-1"
+                title="Delete section"
+                icon={<DeleteFilled />}
+                danger
+              ></Button>
+            </Popconfirm>
+          </div>
         </div>
 
         <div className="page-content">

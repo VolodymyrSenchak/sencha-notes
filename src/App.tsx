@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, ConfigProvider, theme } from "antd";
 import { useState } from "react";
 import "./App.scss";
 import { SectionContent } from "./components/SectionContent";
@@ -11,9 +11,13 @@ import { queryKeys } from "./services/queryKeys";
 import { sectionsService } from "./services/sectionsService";
 import { useSectionsData } from "./hooks/useSectionsData";
 
+const { defaultAlgorithm, darkAlgorithm } = theme;
+
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const currentTheme = isDarkMode ? darkAlgorithm : defaultAlgorithm;
 
   const {
     data: sections,
@@ -62,7 +66,7 @@ function App() {
   }
 
   return (
-    <>
+    <ConfigProvider theme={{ algorithm: currentTheme }}>
       <div className="sencha-app">
         {!!selectedSection ? (
           <>
@@ -91,7 +95,7 @@ function App() {
         cancel={closeNewSectionModal}
         submit={handleNewSectionAdded}
       ></NewSection>
-    </>
+    </ConfigProvider>
   );
 }
 

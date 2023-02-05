@@ -1,5 +1,5 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Menu, MenuProps } from "antd";
+import { AppstoreAddOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Menu, MenuProps } from "antd";
 import { orderBy } from "lodash";
 import { useQuery } from "react-query";
 import { Section } from "../../models";
@@ -18,8 +18,14 @@ export const Sections: React.FC<ISections> = ({
   selectedSection,
   onAddSection,
 }) => {
-  const sectionsQuery = useQuery(queryKeys.sections, sectionsService.getSections);
-  const orderedSections = orderBy(sectionsQuery?.data || [], s => s.createdAt);
+  const sectionsQuery = useQuery(
+    queryKeys.sections,
+    sectionsService.getSections
+  );
+  const orderedSections = orderBy(
+    sectionsQuery?.data || [],
+    (s) => s.createdAt
+  );
   const sectionsNavItems: MenuProps["items"] = orderedSections.map((s) => ({
     label: s.name,
     key: s.name,
@@ -31,20 +37,26 @@ export const Sections: React.FC<ISections> = ({
 
   return (
     <div className="flex-align-items-center sections-menu">
+      <Button
+        type="text"
+        title="Add new section"
+        className="add-new-section-btn"
+        onClick={onAddSection}
+        icon={<AppstoreAddOutlined />}
+      ></Button>
+
       <Menu
         mode="horizontal"
         onClick={onClick}
         selectedKeys={[selectedSection.name]}
-        items={sectionsNavItems}
         className="flex-1"
-      ></Menu>
-
-      <Button
-        type="text"
-        title="Add new section"
-        onClick={onAddSection}
-        icon={<PlusCircleOutlined />}
-      ></Button>
+      >
+        {sectionsNavItems.map((it) => (
+          <Menu.Item key={it?.key}>
+            {it?.key}
+          </Menu.Item>
+        ))}
+      </Menu>
     </div>
   );
 };

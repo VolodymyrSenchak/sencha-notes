@@ -17,6 +17,13 @@
         height: 0;
         flex: 1;
         overflow-y: auto;
+        position: relative;
+
+        .add-new-page-btn {
+          position: absolute;
+          bottom: 8px;
+          right: 8px;
+        }
       }
     }
   
