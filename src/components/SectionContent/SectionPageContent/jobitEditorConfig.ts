@@ -10,4 +10,7 @@ export const JOBIT_EDITOR_CONFIG: any = {
   toolbarButtonSize: "small",
   useSearch: false,
   enter: "div",
+  showCharsCounter: false,
+  showWordsCounter: false,
+  showXPathInStatusbar: false
 };

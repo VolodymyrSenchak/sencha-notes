@@ -19,22 +19,24 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const currentTheme = isDarkMode ? darkAlgorithm : defaultAlgorithm;
 
-  const {
-    data: sections,
-    isLoading
-  } = useQuery(queryKeys.sections, sectionsService.getSections, {
-    onSuccess: (loaded) => {
-      if (loaded.length > 0 && selectedSectionName === undefined) {
-        setSelectedSectionName(loaded[0].name);
-      }
+  const { data: sections, isLoading } = useQuery(
+    queryKeys.sections,
+    sectionsService.getSections,
+    {
+      onSuccess: (loaded) => {
+        if (loaded.length > 0 && selectedSectionName === undefined) {
+          setSelectedSectionName(loaded[0].name);
+        }
+      },
     }
-  });
+  );
 
   const { addSectionMutator, deleteSectionMutator } = useSectionsData();
 
   const selectedSection = sections?.find((s) => s.name === selectedSectionName);
 
-  const onSectionSelected = (selected: string) => setSelectedSectionName(selected);
+  const onSectionSelected = (selected: string) =>
+    setSelectedSectionName(selected);
   const openNewSectionModal = () => setAddSectionOpened(true);
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
@@ -52,9 +54,11 @@ function App() {
     closeNewSectionModal();
   };
 
-  const handleSectionDelete = async () => {
-    const existingSections = sections!.filter((s) => s !== selectedSection);
-    await deleteSectionMutator.mutateAsync(selectedSection?.id!);
+  const handleSectionDelete = async (sectionKey: string) => {
+    const sectionToDelete = sections!.find(section => section.id === sectionKey);
+    const existingSections = sections!.filter(section => section !== sectionToDelete);
+
+    await deleteSectionMutator.mutateAsync(sectionToDelete!.id);
 
     if (existingSections.length > 0) {
       setSelectedSectionName(existingSections[0].name);
@@ -62,7 +66,7 @@ function App() {
   };
 
   if (isLoading) {
-    return (<div className="sencha-app">Initializing your app...</div>);
+    return <div className="sencha-app">Initializing your app...</div>;
   }
 
   return (
@@ -74,15 +78,13 @@ function App() {
               <Sections
                 onAddSection={openNewSectionModal}
                 onSectionSelected={onSectionSelected}
+                onSectionDeleteCalled={handleSectionDelete}
                 selectedSection={selectedSection}
               />
             </header>
 
             <main className="sencha-app-content">
-              <SectionContent
-                sectionId={selectedSection?.id}
-                onDeleteSection={handleSectionDelete}
-              />
+              <SectionContent sectionId={selectedSection?.id} />
             </main>
           </>
         ) : (

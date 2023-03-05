@@ -64,6 +64,10 @@
   @for $i from 1 through 25 {
     &-right-#{$i} { margin-right: #{$i}rem; }
   }
+
+  @for $i from 1 through 25 {
+    &-x-#{$i} { margin-left: #{$i}rem; margin-right: #{$i}rem; }
+  }
 }
 
 @include flex-x-list;

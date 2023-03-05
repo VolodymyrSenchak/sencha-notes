@@ -1,10 +1,8 @@
 import {
   DeleteFilled,
-  PlusCircleTwoTone,
   PlusOutlined,
 } from "@ant-design/icons";
 import { Button, Popconfirm } from "antd";
-import { SectionActions } from "./SectionActions";
 import "./SectionContent.scss";
 import { SectionPageContent } from "./SectionPageContent";
 import { SectionPages } from "./SectionPages";
@@ -12,12 +10,10 @@ import { useSectionContent } from "./useSectionContent";
 
 export interface ISectionContent {
   sectionId: string;
-  onDeleteSection: () => void;
 }
 
 export const SectionContent: React.FC<ISectionContent> = ({
   sectionId,
-  onDeleteSection,
 }) => {
   const {
     sectionPages,
@@ -46,30 +42,13 @@ export const SectionContent: React.FC<ISectionContent> = ({
             <Button
               type="primary"
               size="middle"
-              shape="circle"
               title="Add new page"
-              className="margin-right-1"
+              className="flex-1 margin-x-1"
               icon={<PlusOutlined />}
               onClick={addNewPage}
-              style={{ height: "40px", width: "40px" }}
-            ></Button>
-
-            <Popconfirm
-              title="Are you sure to delete this section?"
-              onConfirm={onDeleteSection}
-              okText="Delete"
-              cancelText="Cancel"
             >
-              <Button
-                type="primary"
-                size="large"
-                shape="circle"
-                className="margin-right-1"
-                title="Delete section"
-                icon={<DeleteFilled />}
-                danger
-              ></Button>
-            </Popconfirm>
+              New Page
+            </Button>
           </div>
         </div>
 
