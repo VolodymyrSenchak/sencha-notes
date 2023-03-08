@@ -18,7 +18,10 @@ export const NewSection: React.FC<INewSection> = ({
   cancel,
   submit,
 }) => {
-  const { data: sections } = useQuery(queryKeys.sections, sectionsService.getSections);
+  const { data: sections } = useQuery(
+    queryKeys.sections,
+    sectionsService.getSections
+  );
 
   const onFinish = (data: NewSectionFormData) => {
     submit(data.sectionName);
