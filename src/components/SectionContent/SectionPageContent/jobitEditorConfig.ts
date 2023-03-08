@@ -2,7 +2,7 @@
 export const JOBIT_EDITOR_CONFIG: any = {
   readonly: false,
   placeholder: "Start typings...",
-  height: 507,
+  height: 490,
   allowResizeX: false,
   allowResizeY: false,
   buttons:
@@ -12,5 +12,7 @@ export const JOBIT_EDITOR_CONFIG: any = {
   enter: "div",
   showCharsCounter: false,
   showWordsCounter: false,
-  showXPathInStatusbar: false
+  showXPathInStatusbar: false,
+  defaultLineHeight: 1.2,
+  defaultFontSize: 14,
 };

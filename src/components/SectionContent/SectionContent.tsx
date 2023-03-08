@@ -43,7 +43,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
               type="primary"
               size="middle"
               title="Add new page"
-              className="flex-1 margin-x-1"
+              className="flex-1 margin-x-1 margin-bottom-1"
               icon={<PlusOutlined />}
               onClick={addNewPage}
             >

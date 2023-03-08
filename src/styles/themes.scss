@@ -1,0 +1,52 @@
+$light-blue-background: #ECF2FF;
+$light-green-background: #EDF1D6;
+
+$white-transparent-background-color: rgba(255, 255, 255, 0.8);
+
+.sencha-app {
+  &.light-blue {
+    background-color: $light-blue-background;
+  }
+
+  &.light-green {
+    background-color: $light-green-background;
+  }
+}
+
+.sencha-app {
+  .ant-menu-light {
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .ant-menu-light.ant-menu-root.ant-menu-vertical {
+    border-inline-end: none;
+  }
+
+  .ant-btn-default {
+    background-color: transparent;
+  }
+
+  &-header {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  }
+
+  .page-content {
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    margin: 1rem;
+    background-color: $white-transparent-background-color;
+    border-radius: 0.5rem;
+
+    .jodit-react-container {
+      .jodit-container {
+        border: none;
+        border-top: 1px solid #ececec;
+
+        .jodit-toolbar__box {
+          background-color: $white-transparent-background-color;
+        }
+      }
+    }
+  }
+}
+

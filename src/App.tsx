@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, theme } from "antd";
+import { Button, ConfigProvider } from "antd";
 import { useState } from "react";
 import "./App.scss";
 import { SectionContent } from "./components/SectionContent";
@@ -11,13 +11,15 @@ import { queryKeys } from "./services/queryKeys";
 import { sectionsService } from "./services/sectionsService";
 import { useSectionsData } from "./hooks/useSectionsData";
 
-const { defaultAlgorithm, darkAlgorithm } = theme;
+const appThemes = {
+  lightBlue: { class: "light-blue", primaryColor: "#6096B4" },
+  lightGreen: { class: "light-green", primaryColor: "#609966" }
+};
 
 function App() {
   const [selectedSectionName, setSelectedSectionName] = useState<string>();
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const currentTheme = isDarkMode ? darkAlgorithm : defaultAlgorithm;
+  const [currentTheme] = useState(appThemes.lightBlue);
 
   const { data: sections, isLoading } = useQuery(
     queryKeys.sections,
@@ -70,8 +72,10 @@ function App() {
   }
 
   return (
-    <ConfigProvider theme={{ algorithm: currentTheme }}>
-      <div className="sencha-app">
+    <ConfigProvider theme={{ token: {
+      colorPrimary: currentTheme.primaryColor,
+    }, }}>
+      <div className={`sencha-app ${currentTheme.class}`}>
         {!!selectedSection ? (
           <>
             <header className="sencha-app-header">
