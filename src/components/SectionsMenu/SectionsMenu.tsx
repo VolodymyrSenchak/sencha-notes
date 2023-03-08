@@ -1,5 +1,4 @@
 import {
-  AppstoreAddOutlined,
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -10,7 +9,7 @@ import { useQuery } from "react-query";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
 import { sectionsService } from "../../services/sectionsService";
-import "./Sections.scss";
+import "./SectionsMenu.scss";
 
 export interface ISections {
   selectedSection: Section;
@@ -19,7 +18,7 @@ export interface ISections {
   onSectionDeleteCalled: (sectionId: string) => void;
 }
 
-export const Sections: React.FC<ISections> = ({
+export const SectionsMenu: React.FC<ISections> = ({
   onSectionSelected,
   selectedSection,
   onAddSection,

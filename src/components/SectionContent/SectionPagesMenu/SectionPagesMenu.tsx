@@ -10,7 +10,7 @@ export interface ISectionPages {
   onPagesOrderChanged: (pages: SectionPage[]) => void;
 }
 
-export const SectionPages: React.FC<ISectionPages> = ({
+export const SectionPagesMenu: React.FC<ISectionPages> = ({
   selectedPage,
   pages,
   onPageSelected,

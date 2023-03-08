@@ -1,20 +1,15 @@
-import {
-  DeleteFilled,
-  PlusOutlined,
-} from "@ant-design/icons";
-import { Button, Popconfirm } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import "./SectionContent.scss";
 import { SectionPageContent } from "./SectionPageContent";
-import { SectionPages } from "./SectionPages";
+import { SectionPagesMenu } from "./SectionPagesMenu";
 import { useSectionContent } from "./useSectionContent";
 
 export interface ISectionContent {
   sectionId: string;
 }
 
-export const SectionContent: React.FC<ISectionContent> = ({
-  sectionId,
-}) => {
+export const SectionContent: React.FC<ISectionContent> = ({ sectionId }) => {
   const {
     sectionPages,
     currentPage,
@@ -30,7 +25,7 @@ export const SectionContent: React.FC<ISectionContent> = ({
       <div className="section-content">
         <div className="section-pages flex-column">
           <div className="section-pages-menu flex-1">
-            <SectionPages
+            <SectionPagesMenu
               selectedPage={currentPage!}
               pages={sectionPages}
               onPageSelected={(page) => changeCurrentPage(page)}
