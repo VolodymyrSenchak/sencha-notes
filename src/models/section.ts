@@ -8,10 +8,10 @@ export interface Section {
 export interface SectionPage {
   id: string;
   name: string;
-  content: SectionPageContent;
+  content: SectionPageEditorContent;
   index: number;
 }
 
-export interface SectionPageContent {
+export interface SectionPageEditorContent {
   text: string;
 }

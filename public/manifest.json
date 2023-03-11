@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Sencha Notes",
+  "name": "Volo Notes",
   "version": "0.0.0.1",
   "description": "Nice app for adding notes and strucuring them by sections with multiple pages.",
   "background": {
@@ -9,10 +9,10 @@
   "permissions": [],
   "author": "Volodymyr Senchak",
   "homepage_url": "https://github.com/VolodymyrSenchak",
-  "short_name": "Sencha Notes",
+  "short_name": "Volo Notes",
   "action": {
     "default_popup": "index.html",
-    "default_title": "Sencha Notes",
+    "default_title": "Volo Notes",
     "default_icon": {
       "16": "/logo.png",
       "32": "/logo.png",
