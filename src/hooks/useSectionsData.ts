@@ -7,12 +7,21 @@ export const useSectionsData = () => {
   const queryClient = useQueryClient();
   const sectionsQuery = useQuery(queryKeys.sections, sectionsService.getSections);
 
+  const isSectionsLoading = sectionsQuery.isLoading;
   const sections = sectionsQuery.data;
 
   const editSectionMutator = useMutation({
     mutationFn: (sc: Section) => sectionsService.editSection(sc),
+    onSuccess: () => {
+      queryClient.resetQueries(queryKeys.sections);
+    }
+  });
+
+  const editSectionDetailsMutator = useMutation({
+    mutationFn: (sc: Section) => sectionsService.editSection(sc),
     onSuccess: ([key, sc]) => {
-      queryClient.setQueryData([queryKeys.sections, key], sc)
+      queryClient.removeQueries(queryKeys.sections);
+      queryClient.setQueryData([queryKeys.sections, key], sc);
     }
   });
 
@@ -29,7 +38,9 @@ export const useSectionsData = () => {
   return {
     sectionsQuery,
     sections,
+    isSectionsLoading,
     editSectionMutator,
+    editSectionDetailsMutator,
     addSectionMutator,
     deleteSectionMutator,
   };

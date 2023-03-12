@@ -3,6 +3,7 @@ export interface Section {
   name: string;
   pages: SectionPage[];
   createdAt: Date;
+  displayOrder?: number;
 }
 
 export interface SectionPage {

@@ -24,7 +24,7 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
   const [currentPage, setCurrentPage] = useState<SectionPage>(sectionPages[0]);
   const sectionName = section?.name;
 
-  const { editSectionMutator } = useSectionsData();
+  const { editSectionDetailsMutator } = useSectionsData();
 
   useEffect(() => {
     if (sectionPages.length > 0) {
@@ -45,12 +45,12 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
     const newPage = createNewEmptyPage(Math.max(sectionPages.length));
     const newSection: Section = { ...section!, pages: [...sectionPages, newPage] };
 
-    await editSectionMutator.mutateAsync(newSection);
+    await editSectionDetailsMutator.mutateAsync(newSection);
     setCurrentPage(newPage);
   };
 
   const handlePageContentChanged = async (newPage: SectionPage) => {
-    await editSectionMutator.mutateAsync({
+    await editSectionDetailsMutator.mutateAsync({
       ...section!,
       pages: section!.pages.map((p) => (p.id === newPage.id ? newPage : p)),
     });
@@ -59,13 +59,13 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
   };
 
   const handlePagesOrderChanged = async (pages: SectionPage[]) => {
-    await editSectionMutator.mutateAsync({ ...section!, pages });
+    await editSectionDetailsMutator.mutateAsync({ ...section!, pages });
   };
 
   const handlePageDeletion = async (page: SectionPage) => {
     const newState = { ...section!, pages: section!.pages.filter((p) => p.id !== page.id) };
 
-    await editSectionMutator.mutateAsync(newState);
+    await editSectionDetailsMutator.mutateAsync(newState);
 
     setCurrentPage(newState.pages[0]);
   };

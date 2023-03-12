@@ -1,37 +1,29 @@
 import { Button } from "antd";
-import { useState } from "react";
-import { useQuery } from "react-query";
+import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
 import { Section } from "../../models";
-import { queryKeys } from "../../services/queryKeys";
-import { sectionsService } from "../../services/sectionsService";
 import { SectionContent } from "../SectionContent";
 import { SectionsMenu } from "../SectionsMenu";
 import { NewSection } from "../SectionsMenu/NewSection";
 
 export const NotesApp: React.FC = () => {
-  const [selectedSectionName, setSelectedSectionName] = useState<string>();
+  const [selectedSectionId, setSelectedSectionId] = useState<string>();
   const [isAddSectionOpened, setAddSectionOpened] = useState<boolean>(false);
 
-  const { data: sections, isLoading } = useQuery(
-    queryKeys.sections,
-    sectionsService.getSections,
-    {
-      onSuccess: (loaded) => {
-        if (loaded.length > 0 && selectedSectionName === undefined) {
-          setSelectedSectionName(loaded[0].name);
-        }
-      },
+  const { sections, isSectionsLoading } = useSectionsData();
+
+  useEffect(() => {
+    if (sections?.length! > 0 && selectedSectionId === undefined) {
+      setSelectedSectionId(sections![0].id);
     }
-  );
+  }, [sections, selectedSectionId]);
 
   const { addSectionMutator, deleteSectionMutator } = useSectionsData();
 
-  const selectedSection = sections?.find((s) => s.name === selectedSectionName);
+  const selectedSection = sections?.find((s) => s.id === selectedSectionId);
 
-  const onSectionSelected = (selected: string) =>
-    setSelectedSectionName(selected);
+  const onSectionSelected = (sectionId: string) => setSelectedSectionId(sectionId);
   const openNewSectionModal = () => setAddSectionOpened(true);
   const closeNewSectionModal = () => setAddSectionOpened(false);
 
@@ -45,7 +37,7 @@ export const NotesApp: React.FC = () => {
 
     await addSectionMutator.mutateAsync(newSection);
 
-    setSelectedSectionName(newSection.name);
+    setSelectedSectionId(newSection.id);
     closeNewSectionModal();
   };
 
@@ -56,11 +48,11 @@ export const NotesApp: React.FC = () => {
     await deleteSectionMutator.mutateAsync(sectionToDelete!.id);
 
     if (existingSections.length > 0) {
-      setSelectedSectionName(existingSections[0].name);
+      setSelectedSectionId(existingSections[0].id);
     }
   };
 
-  if (isLoading) {
+  if (isSectionsLoading) {
     return <div>Initializing your app...</div>;
   }
 

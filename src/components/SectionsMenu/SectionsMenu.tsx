@@ -1,7 +1,4 @@
-import {
-  DeleteOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps, Popover } from "antd";
 import { orderBy } from "lodash";
 import { useState } from "react";
@@ -9,6 +6,7 @@ import { useQuery } from "react-query";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
 import { sectionsService } from "../../services/sectionsService";
+import { SectionEdit } from "./SectionEdit/SectionEdit";
 import "./SectionsMenu.scss";
 
 export interface ISections {
@@ -25,6 +23,7 @@ export const SectionsMenu: React.FC<ISections> = ({
   onSectionDeleteCalled,
 }) => {
   const [popoverSelectedKey, setPopoverSelectedKey] = useState<string>();
+  const [sectionForEdit, setSectionForEdit] = useState<Section>();
 
   const sectionsQuery = useQuery(
     queryKeys.sections,
@@ -32,11 +31,13 @@ export const SectionsMenu: React.FC<ISections> = ({
   );
   const orderedSections = orderBy(
     sectionsQuery?.data || [],
-    (s) => s.createdAt
+    [s => s.displayOrder, (s) => s.createdAt]
   );
 
   const onClick: MenuProps["onClick"] = (e) => {
-    onSectionSelected(e.key);
+    if (e.key !== selectedSection.id) {
+      onSectionSelected(e.key);
+    }
   };
 
   const onContextMenu = (e: React.MouseEvent, key: string) => {
@@ -53,6 +54,15 @@ export const SectionsMenu: React.FC<ISections> = ({
     onSectionDeleteCalled(sectionId);
   };
 
+  const editSectionClicked = (section: Section) => {
+    handleOpenChange(false);
+    setSectionForEdit(section);
+  };
+
+  const onSectionEditingStopped = () => {
+    setSectionForEdit(undefined);
+  };
+
   return (
     <div className="flex-align-items-center sections-menu">
       <Button
@@ -61,28 +71,40 @@ export const SectionsMenu: React.FC<ISections> = ({
         className="add-new-section-btn"
         onClick={onAddSection}
         icon={<PlusOutlined />}
-      >New Section</Button>
+      >
+        New Section
+      </Button>
 
       <Menu
         mode="horizontal"
         onClick={onClick}
-        selectedKeys={[selectedSection.name]}
+        selectedKeys={[selectedSection.id]}
         className="flex-1"
       >
         {orderedSections.map((section) => (
           <Menu.Item
-            key={section.name}
+            key={section.id}
             onContextMenu={(e) => onContextMenu(e, section.id as string)}
           >
             <Popover
               content={
-                <Button
-                  icon={<DeleteOutlined />}
-                  type="text"
-                  onClick={() => onSectionDeleteClicked(section.id as string)}
-                >
-                  Remove Section
-                </Button>
+                <div className="flex-column context-menu-popover">
+                  <Button
+                    icon={<EditOutlined></EditOutlined>}
+                    type="text"
+                    onClick={(e) => { e.stopPropagation(); editSectionClicked(section); }}
+                    className="width-full"
+                  >
+                    Edit Section
+                  </Button>
+                  <Button
+                    icon={<DeleteOutlined />}
+                    type="text"
+                    onClick={(e) => { e.stopPropagation(); onSectionDeleteClicked(section.id as string) }}
+                  >
+                    Remove Section
+                  </Button>
+                </div>
               }
               trigger="click"
               open={popoverSelectedKey === section.id}
@@ -93,6 +115,12 @@ export const SectionsMenu: React.FC<ISections> = ({
           </Menu.Item>
         ))}
       </Menu>
+
+      <SectionEdit
+        section={sectionForEdit}
+        isModalOpened={!!sectionForEdit}
+        onCloseModal={onSectionEditingStopped}
+      ></SectionEdit>
     </div>
   );
 };
