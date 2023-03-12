@@ -21,6 +21,11 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
 
   .ant-menu-light.ant-menu-root.ant-menu-vertical {
     border-inline-end: none;
+
+    .ant-menu-item-selected {
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+      background-color: rgba(255, 255, 255, 0.6);
+    }
   }
 
   .ant-btn-default {
