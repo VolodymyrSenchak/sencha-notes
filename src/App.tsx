@@ -1,21 +1,15 @@
 import { ConfigProvider } from "antd";
-import { useState } from "react";
 import "./App.scss";
 import { NotesApp } from "./components/NotesApp/notesApp";
-
-const appThemes = {
-  lightBlue: { class: "light-blue", primaryColor: "#6096B4" },
-  lightGreen: { class: "light-green", primaryColor: "#609966" },
-};
+import { useAppSettingsData } from "./hooks/useAppSettingsData";
 
 function App() {
-  const [currentTheme] = useState(appThemes.lightBlue);
-
-  const themeConfig = { token: { colorPrimary: currentTheme.primaryColor } };
+  const { appTheme } = useAppSettingsData();
+  const themeConfig = { token: { colorPrimary: appTheme.primaryColor } };
 
   return (
     <ConfigProvider theme={themeConfig}>
-      <div className={`sencha-app ${currentTheme.class}`}>
+      <div className={`sencha-app ${appTheme.class}`}>
         <NotesApp></NotesApp>
       </div>
     </ConfigProvider>

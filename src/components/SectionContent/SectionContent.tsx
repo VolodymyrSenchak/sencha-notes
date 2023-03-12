@@ -1,7 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import "./SectionContent.scss";
-import { SectionPageContent } from "./SectionPageContent";
+import { SectionPageContent } from "./SectionPageContent/SectionPageContent";
 import { SectionPagesMenu } from "./SectionPagesMenu";
 import { useSectionContent } from "./useSectionContent";
 

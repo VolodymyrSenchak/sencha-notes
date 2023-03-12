@@ -7,6 +7,7 @@ import { useActiveSectionData } from "../../hooks/useSectionSelection";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
 import { sectionsService } from "../../services/sectionsService";
+import { AppSettings } from "../AppSettings/AppSettings";
 import { SectionEdit } from "./SectionEdit/SectionEdit";
 import "./SectionsMenu.scss";
 
@@ -115,6 +116,8 @@ export const SectionsMenu: React.FC<ISections> = ({
           </Menu.Item>
         ))}
       </Menu>
+
+      <AppSettings></AppSettings>
 
       <SectionEdit
         section={sectionForEdit}

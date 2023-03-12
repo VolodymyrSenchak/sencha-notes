@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";

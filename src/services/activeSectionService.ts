@@ -1,9 +1,6 @@
-export const ACTIVE_SECTION_KEY = "active-section";
+import { ActiveSection } from "../models";
 
-export interface ActiveSection {
-  sectionId: string;
-  sectionPageId: string;
-}
+export const ACTIVE_SECTION_KEY = "active-section";
 
 export const activeSectionService = {
   getActiveSection: (): ActiveSection => {
