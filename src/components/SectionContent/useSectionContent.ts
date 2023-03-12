@@ -2,43 +2,33 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
+import { useActiveSectionData } from "../../hooks/useSectionSelection";
 import { Section, SectionPage } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
 import { sectionsService } from "../../services/sectionsService";
 
-interface IUseSectionContent {
-  sectionId: string;
-}
+export const useSectionContent = () => {
+  const {activeSection, setActiveSection} = useActiveSectionData();
 
-export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
   const sectionQuery = useQuery(
     {
-      queryKey: [queryKeys.sections, sectionId],
-      queryFn: () => sectionsService.getSection(sectionId),
+      queryKey: [queryKeys.sections, activeSection!.sectionId],
+      queryFn: ({ queryKey }) => sectionsService.getSection(queryKey[1]),
     }
   );
 
   const section = sectionQuery.data;
   const sectionPages = section?.pages || [];
-
-  const [currentPage, setCurrentPage] = useState<SectionPage>(sectionPages[0]);
-  const sectionName = section?.name;
+  const currentPage = section?.pages.find(page => page.id === activeSection?.sectionPageId);
 
   const { editSectionDetailsMutator } = useSectionsData();
-
-  useEffect(() => {
-    if (sectionPages.length > 0) {
-      setCurrentPage(sectionPages[0]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionName]);
 
   const createNewEmptyPage = (index: number): SectionPage => {
     return { id: v4(), name: "", content: { text: "" }, index };
   };
 
   const changeCurrentPage = (page: SectionPage) => {
-    setCurrentPage(page);
+    setActiveSection({ sectionId: section!.id, sectionPageId: page.id });
   } 
 
   const addNewPage = async () => {
@@ -46,7 +36,7 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
     const newSection: Section = { ...section!, pages: [...sectionPages, newPage] };
 
     await editSectionDetailsMutator.mutateAsync(newSection);
-    setCurrentPage(newPage);
+    changeCurrentPage(newPage);
   };
 
   const handlePageContentChanged = async (newPage: SectionPage) => {
@@ -54,8 +44,6 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
       ...section!,
       pages: section!.pages.map((p) => (p.id === newPage.id ? newPage : p)),
     });
-
-    setCurrentPage(newPage);
   };
 
   const handlePagesOrderChanged = async (pages: SectionPage[]) => {
@@ -67,7 +55,7 @@ export const useSectionContent = ({ sectionId }: IUseSectionContent) => {
 
     await editSectionDetailsMutator.mutateAsync(newState);
 
-    setCurrentPage(newState.pages[0]);
+    changeCurrentPage(newState.pages[0]);
   };
 
   return {

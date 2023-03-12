@@ -3,6 +3,7 @@ import { Button, Menu, MenuProps, Popover } from "antd";
 import { orderBy } from "lodash";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { useActiveSectionData } from "../../hooks/useSectionSelection";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
 import { sectionsService } from "../../services/sectionsService";
@@ -10,20 +11,18 @@ import { SectionEdit } from "./SectionEdit/SectionEdit";
 import "./SectionsMenu.scss";
 
 export interface ISections {
-  selectedSection: Section;
   onAddSection: () => void;
-  onSectionSelected: (sectionName: string) => void;
   onSectionDeleteCalled: (sectionId: string) => void;
 }
 
 export const SectionsMenu: React.FC<ISections> = ({
-  onSectionSelected,
-  selectedSection,
   onAddSection,
   onSectionDeleteCalled,
 }) => {
   const [popoverSelectedKey, setPopoverSelectedKey] = useState<string>();
   const [sectionForEdit, setSectionForEdit] = useState<Section>();
+
+  const { activeSection, setActiveSection } = useActiveSectionData();
 
   const sectionsQuery = useQuery(
     queryKeys.sections,
@@ -35,8 +34,9 @@ export const SectionsMenu: React.FC<ISections> = ({
   );
 
   const onClick: MenuProps["onClick"] = (e) => {
-    if (e.key !== selectedSection.id) {
-      onSectionSelected(e.key);
+    if (e.key !== activeSection?.sectionId) {
+      const section = orderedSections.find(s => s.id === e.key);
+      setActiveSection({ sectionId: section!.id, sectionPageId: section!.pages[0].id });
     }
   };
 
@@ -78,7 +78,7 @@ export const SectionsMenu: React.FC<ISections> = ({
       <Menu
         mode="horizontal"
         onClick={onClick}
-        selectedKeys={[selectedSection.id]}
+        selectedKeys={[activeSection!.sectionId]}
         className="flex-1"
       >
         {orderedSections.map((section) => (

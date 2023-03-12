@@ -6,10 +6,9 @@ import { SectionPagesMenu } from "./SectionPagesMenu";
 import { useSectionContent } from "./useSectionContent";
 
 export interface ISectionContent {
-  sectionId: string;
 }
 
-export const SectionContent: React.FC<ISectionContent> = ({ sectionId }) => {
+export const SectionContent: React.FC<ISectionContent> = () => {
   const {
     sectionPages,
     currentPage,
@@ -18,7 +17,7 @@ export const SectionContent: React.FC<ISectionContent> = ({ sectionId }) => {
     handlePageContentChanged,
     handlePageDeletion,
     handlePagesOrderChanged,
-  } = useSectionContent({ sectionId });
+  } = useSectionContent();
 
   return (
     <section className="section-details">
@@ -49,7 +48,7 @@ export const SectionContent: React.FC<ISectionContent> = ({ sectionId }) => {
 
         <div className="page-content">
           <SectionPageContent
-            page={currentPage}
+            page={currentPage!}
             isPageDeleteAllowed={sectionPages.length > 1}
             onPageChanged={handlePageContentChanged}
             onPageDelete={handlePageDeletion}
