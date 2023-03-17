@@ -49,8 +49,8 @@ export const useSectionContent = () => {
     await editSectionDetailsMutator.mutateAsync({ ...section!, pages });
   };
 
-  const handlePageDeletion = async (page: SectionPage) => {
-    const newState = { ...section!, pages: section!.pages.filter((p) => p.id !== page.id) };
+  const handlePageDeletion = async (pageId: string) => {
+    const newState = { ...section!, pages: section!.pages.filter((p) => p.id !== pageId) };
 
     await editSectionDetailsMutator.mutateAsync(newState);
 

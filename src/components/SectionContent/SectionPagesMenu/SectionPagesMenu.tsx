@@ -1,56 +1,84 @@
-import { Menu, MenuProps } from "antd";
+import { Button, Menu, MenuProps, Popover } from "antd";
 import { SectionPage } from "../../../models";
 import ReactDragListView from "react-drag-listview";
 import { orderBy } from "lodash";
+import { useState } from "react";
+import { DeleteOutlined } from "@ant-design/icons";
+import { getDragProps } from "./dragPageProps";
 
 export interface ISectionPages {
   selectedPage: SectionPage;
   pages: SectionPage[];
   onPageSelected: (page: SectionPage) => void;
   onPagesOrderChanged: (pages: SectionPage[]) => void;
+  onPageDelete: (pageId: string) => void;
 }
 
 export const SectionPagesMenu: React.FC<ISectionPages> = ({
   selectedPage,
   pages,
   onPageSelected,
-  onPagesOrderChanged
+  onPagesOrderChanged,
+  onPageDelete,
 }) => {
-  const orderedPages = orderBy(pages, p => p.index);
-  const navItems: MenuProps["items"] = orderedPages.map((p) => ({
-    label: p.name || "Untitled",
-    key: p.id,
-  }));
+  const [popoverSelectedKey, setPopoverSelectedKey] = useState<string>();
+  const dragProps = getDragProps<SectionPage>(pages, onPagesOrderChanged);
 
-  const onClick: MenuProps["onClick"] = (e) => {
-    const newSelection = pages.find((p) => p.id === e.key);
-    onPageSelected(newSelection!);
+  const onMenuItemClick: MenuProps["onClick"] = (e) => {
+    onPageSelected(pages.find((p) => p.id === e.key)!);
   };
 
-  const dragProps = {
-    onDragEnd(fromIndex: number, toIndex: number) {
-      if (toIndex === -1) return;
+  const handleContextOpenClose = (newOpen: boolean) => {
+    if (!newOpen) setPopoverSelectedKey(undefined);
+  };
 
-      const newOrderedPages = pages.map(page => {
-        if (page.index === fromIndex) return { ...page, index: toIndex };
-        if (page.index === toIndex) return { ...page, index: fromIndex };
-        return { ...page };
-      });
+  const onContextMenuOpen = (e: React.MouseEvent, key: string) => {
+    e.preventDefault();
+    setPopoverSelectedKey(key);
+  };
 
-      onPagesOrderChanged(newOrderedPages);
-    },
-    handleSelector: "li",
-    nodeSelector: "li"
+  const onPageDeleteClicked = (pageId: string) => {
+    handleContextOpenClose(false);
+    onPageDelete(pageId);
   };
 
   return (
     <ReactDragListView {...dragProps}>
       <Menu
         mode="vertical"
-        onClick={onClick}
+        onClick={onMenuItemClick}
         selectedKeys={selectedPage ? [selectedPage.id] : []}
-        items={navItems}
-      ></Menu>
+      >
+        {orderBy(pages, (p) => p.index).map((page) => (
+          <Menu.Item
+            key={page!.id}
+            onContextMenu={(e) => onContextMenuOpen(e, page!.id as string)}
+          >
+            <Popover
+              content={
+                <div className="flex-column context-menu-popover">
+                  <Button
+                    disabled={pages.length < 2}
+                    icon={<DeleteOutlined />}
+                    type="text"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPageDeleteClicked(page!.id as string);
+                    }}
+                  >
+                    Remove Page
+                  </Button>
+                </div>
+              }
+              trigger="click"
+              open={popoverSelectedKey === page!.id}
+              onOpenChange={handleContextOpenClose}
+            >
+              {page.name || "Untitled"}
+            </Popover>
+          </Menu.Item>
+        ))}
+      </Menu>
     </ReactDragListView>
   );
 };

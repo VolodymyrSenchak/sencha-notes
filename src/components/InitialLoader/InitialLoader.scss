@@ -1,0 +1,11 @@
+.initial-loader {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  &-text {
+    font-size: 18px;
+    color: #C1C1C1;
+  }
+}

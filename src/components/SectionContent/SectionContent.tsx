@@ -29,6 +29,7 @@ export const SectionContent: React.FC<ISectionContent> = () => {
               pages={sectionPages}
               onPageSelected={(page) => changeCurrentPage(page)}
               onPagesOrderChanged={handlePagesOrderChanged}
+              onPageDelete={handlePageDeletion}
             />
           </div>
 
