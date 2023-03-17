@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
 import { useActiveSectionData } from "../../hooks/useSectionSelection";
 import { Section } from "../../models";
-import { SectionContent } from "../SectionContent";
+import { SectionContent } from "../SectionContent/SectionContent";
 import { SectionsMenu } from "../SectionsMenu";
 import { NewSection } from "../SectionsMenu/NewSection";
 

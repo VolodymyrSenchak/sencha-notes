@@ -1,6 +1,7 @@
 import { DeleteFilled } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import JoditEditor from "jodit-react";
+import { useEffect, useState } from "react";
 import { SectionPage } from "../../../models";
 import { JOBIT_EDITOR_CONFIG } from "./jobitEditorConfig";
 import "./SectionPageContent.scss";
@@ -18,11 +19,29 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
   onPageChanged,
   onPageDelete,
 }) => {
-  const onContentChanged = (text: string) =>
-    onPageChanged({ ...page, content: { text } });
+  const [pageName, setPageName] = useState("");
+  const [pageContent, setPageContent] = useState("");
 
-  const onSectionNameChanged = (name: string) =>
-    onPageChanged({ ...page, name });
+  const pageId = page?.id;
+
+  // Grap page name and content only when page has been changed or created
+  useEffect(() => {
+    setPageName(page?.name);
+    setPageContent(page?.content.text);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId]);
+
+  // Updating page is asynccrounous, so it's better to have inner state for pageName
+  useEffect(() => {
+    onPageChanged({ ...page, name: pageName });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageName]);
+
+  // Updating page is asynccrounous, so it's better to have inner state for page content
+  useEffect(() => {
+    onPageChanged({ ...page, content: { text: pageContent } });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageContent]);
 
   if (!page) return null;
 
@@ -34,8 +53,8 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
           placeholder="Enter page name here"
           size="large"
           bordered={false}
-          value={page.name}
-          onChange={(e) => onSectionNameChanged(e.target.value)}
+          value={pageName}
+          onChange={(e) => setPageName(e.target.value)}
         ></Input>
 
         <Button
@@ -51,10 +70,10 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
 
       <div className="height-stub flex-1">
         <JoditEditor
-          value={page.content.text}
+          value={pageContent}
           config={JOBIT_EDITOR_CONFIG}
           // preferred to use only this option to update the content for performance reasons
-          onBlur={(newContent) => onContentChanged(newContent)}
+          onBlur={(newContent) => setPageContent(newContent)}
         />
       </div>
     </div>
