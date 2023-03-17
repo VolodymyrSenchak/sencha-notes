@@ -6,3 +6,19 @@
 .jodit-wysiwyg {
     font-size: 14px;
 }
+
+.quill-editor {
+    $header-height: 42px;
+    height: calc(100% - $header-height);
+
+    .ql-toolbar.ql-snow {
+        border: none;
+        border-top: 1px solid #dadada;
+        border-bottom: 1px solid #dadada;
+    }
+
+    .ql-container.ql-snow {
+        border: none;
+
+    }
+}

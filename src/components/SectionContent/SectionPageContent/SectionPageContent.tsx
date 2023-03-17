@@ -1,9 +1,9 @@
 import { DeleteFilled } from "@ant-design/icons";
 import { Button, Input } from "antd";
-import JoditEditor from "jodit-react";
 import { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
 import { SectionPage } from "../../../models";
-import { JOBIT_EDITOR_CONFIG } from "./jobitEditorConfig";
+import { QUILL_MODULES } from "./quill-modules";
 import "./SectionPageContent.scss";
 
 export interface ISectionPageContent {
@@ -21,26 +21,31 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
 }) => {
   const [pageName, setPageName] = useState("");
   const [pageContent, setPageContent] = useState("");
-
   const pageId = page?.id;
 
   // Grap page name and content only when page has been changed or created
   useEffect(() => {
     setPageName(page?.name);
     setPageContent(page?.content.text);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId]);
 
   // Updating page is asynccrounous, so it's better to have inner state for pageName
   useEffect(() => {
-    onPageChanged({ ...page, name: pageName });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (pageId) {
+      onPageChanged({ ...page, name: pageName });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageName]);
 
   // Updating page is asynccrounous, so it's better to have inner state for page content
   useEffect(() => {
-    onPageChanged({ ...page, content: { text: pageContent } });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (pageId) {
+      onPageChanged({ ...page, content: { text: pageContent } });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageContent]);
 
   if (!page) return null;
@@ -69,11 +74,12 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
       </div>
 
       <div className="height-stub flex-1">
-        <JoditEditor
+        <ReactQuill
+          modules={QUILL_MODULES}
+          className="quill-editor"
+          theme="snow"
           value={pageContent}
-          config={JOBIT_EDITOR_CONFIG}
-          // preferred to use only this option to update the content for performance reasons
-          onBlur={(newContent) => setPageContent(newContent)}
+          onChange={setPageContent}
         />
       </div>
     </div>
