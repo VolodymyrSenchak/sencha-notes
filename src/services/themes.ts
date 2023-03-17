@@ -17,4 +17,9 @@ export const APP_THEMES: Theme[] = [
     class: "light-green",
     primaryColor: "#609966"
   },
+  {
+    name: "Light Brown",
+    class: "light-brown",
+    primaryColor: "#576F72"
+  }
 ];
