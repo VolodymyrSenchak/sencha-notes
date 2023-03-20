@@ -12,12 +12,19 @@ export const useSectionPageContent = ({
 }: IUseSectionPageContent) => {
   const [pageName, setPageName] = useState("");
   const [pageContent, setPageContent] = useState("");
+  const [isLoadingPageContent, setIsLoadingPageContent] = useState<boolean>(false);
   const pageId = page?.id;
 
   // Grap page name and content only when page has been changed or created
   useEffect(() => {
-    setPageName(page?.name);
-    setPageContent(page?.content.text);
+    setIsLoadingPageContent(true);
+
+    setTimeout(() => {
+      setPageName(page?.name);
+      setPageContent(page?.content.text);
+      setIsLoadingPageContent(false);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId]);
 
@@ -42,6 +49,7 @@ export const useSectionPageContent = ({
   return {
     pageName,
     pageContent,
+    isLoadingPageContent,
     setPageName,
     setPageContent,
   };

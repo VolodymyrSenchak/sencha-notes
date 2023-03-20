@@ -8,4 +8,7 @@ export const QUILL_TOOLBAR_OPTIONS = [
 
 export const QUILL_MODULES = {
   toolbar: QUILL_TOOLBAR_OPTIONS,
+  clipboard: {
+    matchVisual: false,
+  }
 };
