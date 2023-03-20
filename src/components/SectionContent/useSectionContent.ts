@@ -1,3 +1,4 @@
+import { max, maxBy } from "lodash";
 import { useQuery } from "react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
@@ -22,16 +23,13 @@ export const useSectionContent = () => {
 
   const { editSectionDetailsMutator } = useSectionsData();
 
-  const createNewEmptyPage = (index: number): SectionPage => {
-    return { id: v4(), name: "", content: { text: "" }, index };
-  };
-
   const changeCurrentPage = (page: SectionPage) => {
     setActiveSection({ sectionId: section!.id, sectionPageId: page.id });
   } 
 
   const addNewPage = async () => {
-    const newPage = createNewEmptyPage(Math.max(sectionPages.length));
+    const index = max(sectionPages.map(s => s.index)) || 0 + 1;
+    const newPage: SectionPage = { id: v4(), name: "", content: { text: "" }, index };
     const newSection: Section = { ...section!, pages: [...sectionPages, newPage] };
 
     await editSectionDetailsMutator.mutateAsync(newSection);

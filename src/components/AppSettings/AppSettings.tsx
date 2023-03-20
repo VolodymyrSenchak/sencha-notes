@@ -1,8 +1,8 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Button, Form, Modal, Select } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAppSettingsData } from "../../hooks/useAppSettingsData";
-import { AppSettingsModel } from "../../models";
+import { AppSettingsModel, AppSize } from "../../models";
 import { APP_THEMES, DEFAULT_THEME } from "../../services/themes";
 
 export interface IAppSettings {}
@@ -11,8 +11,11 @@ export const AppSettings: React.FC<IAppSettings> = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { appSettings, setAppSettings } = useAppSettingsData();
 
+  const appSizes = useMemo<AppSize[]>(() => ["small", "normal", "large"], []);
+
   const initialFormData: AppSettingsModel = {
     currentTheme: appSettings?.currentTheme || DEFAULT_THEME,
+    currentSize: appSettings?.currentSize || "normal",
   };
 
   const closeModal = () => setModalVisible(false);
@@ -20,6 +23,7 @@ export const AppSettings: React.FC<IAppSettings> = () => {
   const onFinish = async (data: AppSettingsModel) => {
     setAppSettings({
       currentTheme: data.currentTheme,
+      currentSize: data.currentSize,
     });
 
     closeModal();
@@ -56,6 +60,15 @@ export const AppSettings: React.FC<IAppSettings> = () => {
                 options={APP_THEMES.map((th) => ({
                   value: th.name,
                   label: th.name,
+                }))}
+              />
+            </Form.Item>
+
+            <Form.Item label="App Size" name="currentSize">
+              <Select
+                options={appSizes.map((appSize) => ({
+                  value: appSize,
+                  label: appSize,
                 }))}
               />
             </Form.Item>

@@ -12,12 +12,12 @@ export const useAppSettingsData = () => {
 
   const appSettingsQuery = useQuery<AppSettingsModel>(
     [queryKeys.appSettings, APP_SETTINGS_KEY],
-    () => appSettingsService.getActiveSection()
+    () => appSettingsService.getAppSettings()
   );
 
   const editAppSettingsMutator = useMutation({
     mutationFn: (appSettings: AppSettingsModel) => {
-      appSettingsService.setActiveSection(appSettings);
+      appSettingsService.setAppSettings(appSettings);
       return Promise.resolve([APP_SETTINGS_KEY, appSettings]);
     },
     onSuccess: ([key, appSettings]) => {
@@ -31,6 +31,8 @@ export const useAppSettingsData = () => {
     APP_THEMES.find((t) => t.name === appSettings?.currentTheme) ||
     APP_THEMES.find((t) => t.name === DEFAULT_THEME)!;
 
+  const appSize = appSettings?.currentSize || "normal";
+
   const setAppSettings = (value: AppSettingsModel) => {
     editAppSettingsMutator.mutate(value);
   };
@@ -38,6 +40,7 @@ export const useAppSettingsData = () => {
   return {
     appSettings,
     appTheme,
+    appSize,
     setAppSettings,
   };
 };

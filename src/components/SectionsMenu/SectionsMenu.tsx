@@ -37,7 +37,8 @@ export const SectionsMenu: React.FC<ISections> = ({
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key !== activeSection?.sectionId) {
       const section = orderedSections.find(s => s.id === e.key);
-      setActiveSection({ sectionId: section!.id, sectionPageId: section!.pages[0].id });
+      const [firstPage] = orderBy(section!.pages, (p) => p.index);
+      setActiveSection({ sectionId: section!.id, sectionPageId: firstPage.id });
     }
   };
 
