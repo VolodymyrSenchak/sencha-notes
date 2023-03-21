@@ -1,4 +1,4 @@
-import { DeleteFilled } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import ReactQuill from "react-quill";
 import { SectionPage } from "../../../models";
@@ -45,8 +45,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
               size="large"
               title="Delete this page"
               disabled={!isPageDeleteAllowed}
-              icon={<DeleteFilled />}
-              danger
+              icon={<DeleteOutlined />}
               onClick={() => onPageDelete(page.id)}
             ></Button>
           </div>

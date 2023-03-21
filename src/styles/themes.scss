@@ -20,6 +20,14 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
   &.light-brown {
     background-color:  $light-brown-background;
   }
+
+  &.dark-brown {
+    background-color: #2C3639;
+  }
+
+  &.dark-green {
+    background-color: #4D455D;
+  }
 }
 
 .sencha-app {
@@ -50,17 +58,23 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
     margin: 1rem;
     background-color: $white-transparent-background-color;
     border-radius: 0.5rem;
+  }
 
-    .jodit-react-container {
-      .jodit-container {
-        border: none;
-        border-top: 1px solid #ececec;
+  &.dark-mode {
+    color: rgba(255, 255, 255, 0.85);
 
-        .jodit-toolbar__box {
-          background-color: $white-transparent-background-color;
-        }
-      }
+    .ant-menu-light.ant-menu-root.ant-menu-vertical {
+      .ant-menu-item-active { background-color: rgba(255, 255, 255, 0.05); }
+      .ant-menu-item-selected { background-color: rgba(255, 255, 255, 0.1); }
+    }
+
+    .page-content {
+      box-shadow: rgba(100, 100, 100, 0.05) 0px 1px 0px, rgba(100, 100, 100, 0.1) 0px 0px 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .sencha-app-header {
+      box-shadow: rgba(255, 255, 255, 0.15) 0px 1px 2px 0px;
     }
   }
 }
-
