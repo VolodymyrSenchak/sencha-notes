@@ -45,6 +45,8 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
 
     &.ant-menu-horizontal {
       line-height: max(4.4rem, 46px);
+      overflow-x: hidden;
+      overflow-y: hidden;
     }
 
     &.ant-menu-vertical > .ant-menu-item {
