@@ -2,6 +2,25 @@
   $header-height: 42px;
   height: calc(100% - $header-height);
 
+
+  .ql-container {
+    font-size: 1.3rem;
+    letter-spacing: 0.01rem;
+  }
+
+  .ql-editor {
+    line-height: 1.5;
+  }
+
+  .ql-picker {
+    font-size: 1.4rem;
+  }
+
+  .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button {
+    height: 2.4rem;
+    width: 2.8rem;
+  }
+
   .ql-toolbar.ql-snow {
       border: none;
       border-top: 1px solid #dadada;

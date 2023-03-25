@@ -33,6 +33,8 @@ export const useAppSettingsData = () => {
 
   const appSize = appSettings?.currentSize || "normal";
 
+  const appZoom = appSettings?.appZoom || "100%";
+
   const setAppSettings = (value: AppSettingsModel) => {
     editAppSettingsMutator.mutate(value);
   };
@@ -41,6 +43,7 @@ export const useAppSettingsData = () => {
     appSettings,
     appTheme,
     appSize,
+    appZoom,
     setAppSettings,
   };
 };

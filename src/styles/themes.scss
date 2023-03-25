@@ -4,6 +4,12 @@ $light-brown-background: #F0EBE3;
 
 $white-transparent-background-color: rgba(255, 255, 255, 0.8);
 
+.ant-modal {
+  .ant-modal-title {
+    font-size: 1.6rem;
+  }
+}
+
 .sencha-app {
   &.small-size { height: 500px; width: 650px; }
   &.normal-size { height: 550px; width: 700px; }
@@ -34,6 +40,29 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
   .ant-menu-light {
     background: transparent;
     border-bottom: none;
+    font-size: 1.4rem;
+    letter-spacing: 0.01rem;
+
+    &.ant-menu-horizontal {
+      line-height: max(4.4rem, 46px);
+    }
+
+    &.ant-menu-vertical > .ant-menu-item {
+      height: 4rem;
+      line-height: 4rem;
+    }
+  }
+
+  .ant-btn {
+    font-size: 1.4rem;
+    letter-spacing: 0.01rem;
+    height: 3.2rem;
+    padding: 0.4rem 1.5rem;
+
+    &.ant-btn-icon-only {
+      padding-inline-start: 0;
+      padding-inline-end: 0;
+    }
   }
 
   .ant-menu-light.ant-menu-root.ant-menu-vertical {

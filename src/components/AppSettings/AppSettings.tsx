@@ -2,7 +2,7 @@ import { SettingOutlined } from "@ant-design/icons";
 import { Button, Form, Modal, Select } from "antd";
 import { useMemo, useState } from "react";
 import { useAppSettingsData } from "../../hooks/useAppSettingsData";
-import { AppSettingsModel, AppSize } from "../../models";
+import { AppSettingsModel, AppSize, AppZoom } from "../../models";
 import { APP_THEMES, DEFAULT_THEME } from "../../services/themes";
 
 export interface IAppSettings {}
@@ -12,10 +12,12 @@ export const AppSettings: React.FC<IAppSettings> = () => {
   const { appSettings, setAppSettings } = useAppSettingsData();
 
   const appSizes = useMemo<AppSize[]>(() => ["small", "normal", "large"], []);
+  const appZooms = useMemo<AppZoom[]>(() => ["90%", "100%", "110%", "120%"], []);
 
   const initialFormData: AppSettingsModel = {
     currentTheme: appSettings?.currentTheme || DEFAULT_THEME,
     currentSize: appSettings?.currentSize || "normal",
+    appZoom: appSettings?.appZoom || "100%",
   };
 
   const closeModal = () => setModalVisible(false);
@@ -24,6 +26,7 @@ export const AppSettings: React.FC<IAppSettings> = () => {
     setAppSettings({
       currentTheme: data.currentTheme,
       currentSize: data.currentSize,
+      appZoom: data.appZoom
     });
 
     closeModal();
@@ -69,6 +72,15 @@ export const AppSettings: React.FC<IAppSettings> = () => {
                 options={appSizes.map((appSize) => ({
                   value: appSize,
                   label: appSize,
+                }))}
+              />
+            </Form.Item>
+
+            <Form.Item label="App Zoom" name="appZoom">
+              <Select
+                options={appZooms.map((zoom) => ({
+                  value: zoom,
+                  label: zoom,
                 }))}
               />
             </Form.Item>
