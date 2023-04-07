@@ -31,6 +31,10 @@
   }
 }
 
+@for $i from 1 through 12 {
+  .flex-gap-#{$i} { gap: #{$i}rem; }
+}
+
 @mixin flex-x-list {
   @for $i from 1 through 12 {
       .flex-#{$i} { flex: $i; }
