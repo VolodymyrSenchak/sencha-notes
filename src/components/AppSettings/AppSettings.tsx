@@ -1,5 +1,5 @@
 import { SettingOutlined } from "@ant-design/icons";
-import { Button, Modal, Tabs } from "antd";
+import { Button, Modal, Tabs, Tooltip } from "antd";
 import { useState } from "react";
 import { ImportExport } from "./ImportExport/ImportExport";
 import { SettingsForm } from "./SettingsForm/SettingsForm";
@@ -39,9 +39,13 @@ export const AppSettings: React.FC<IAppSettings> = () => {
                 children: <SettingsForm formSubmitted={closeModal} />,
               },
               {
-                label: "Import/Export",
+                label: (
+                  <Tooltip title="For now syncing is not available. But now You can sync sections data with files.">
+                    <span>Import/Export</span>
+                  </Tooltip>
+                ),
                 key: "2",
-                children: <ImportExport />,
+                children: <ImportExport importFinished={closeModal}/>,
               },
             ]}
           />

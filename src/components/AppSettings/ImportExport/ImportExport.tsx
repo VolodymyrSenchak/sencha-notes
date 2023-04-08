@@ -1,6 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Alert, Button, message, Upload } from "antd";
-import { isEmpty } from "lodash";
+import { Alert, Button, Checkbox, message, Upload } from "antd";
+import { isEmpty, isNil } from "lodash";
 import { useState } from "react";
 import {
   downloadObjectAsJson,
@@ -8,12 +8,26 @@ import {
 } from "../../../common/utils/fileUtils";
 import { Section } from "../../../models";
 import { sectionsService } from "../../../services/sectionsService";
+import { useSectionsData } from "../../../hooks/useSectionsData";
+import { useQueryClient } from "react-query";
+import { queryKeys } from "../../../services/queryKeys";
 
-interface IImportExport {}
+interface IImportExport {
+  importFinished: () => void;
+}
 
-export const ImportExport: React.FC<IImportExport> = () => {
-  const [sectionsToImport, setSectionsToImport] = useState<Section[]>([]);
+interface SectionToImport {
+  section: Section;
+  import: boolean;
+}
+
+export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
+  const [sectionsToImport, setSectionsToImport] = useState<SectionToImport[]>(
+    []
+  );
   const [messageApi, contextHolder] = message.useMessage();
+  const sectionsData = useSectionsData();
+  const queryClient = useQueryClient();
 
   const onExportSectionsClicked = async () => {
     const allSections = await sectionsService.getSections();
@@ -22,12 +36,14 @@ export const ImportExport: React.FC<IImportExport> = () => {
 
   const props = {
     beforeUpload: async (file: File) => {
-      const sections = await readFile<any>(file);
+      const sections = await readFile<Section[]>(file);
 
       const basicalyValidFile = validateFile(sections);
 
       if (basicalyValidFile) {
-        setSectionsToImport(sections);
+        setSectionsToImport(
+          sections.map((section) => ({ section, import: true }))
+        );
       } else {
         messageApi.error("Looks like file has invalid data.");
       }
@@ -43,22 +59,45 @@ export const ImportExport: React.FC<IImportExport> = () => {
     for (const item of data as Section[]) {
       if (isEmpty(item.name)) return false;
       if (!Array.isArray(item.pages)) return false;
+
+      for (const page of item.pages) {
+        if (isEmpty(page.name)) return false;
+        if (isNil(page.content)) return false;
+      }
     }
 
     return true;
   };
 
-  const importSections = () => {};
+  const importSections = async () => {
+    const newSections = sectionsToImport
+      .filter((s) => s.import)
+      .map((s) => s.section);
+
+    const existingSections = await sectionsService.getSections();
+
+    for (const newSection of newSections) {
+      const existing = existingSections.find(
+        (s) => s.name.toLowerCase() === newSection.name.toLowerCase()
+      );
+
+      if (!isNil(existing)) {
+        await sectionsService.deleteSection(existing.id);
+      }
+
+      await sectionsService.addSection(newSection);
+    }
+
+    await queryClient.resetQueries(queryKeys.sections)
+
+    importFinished();
+  };
 
   return (
     <div>
       {contextHolder}
-      <Alert
-        message="For now syncing is not available. But now You can sync sections data with files."
-        type="info"
-      />
 
-      <div className="flex margin-top-1 flex-gap-1">
+      <div className="flex flex-gap-1">
         <div className="flex-1">
           <Upload {...props}>
             <Button icon={<UploadOutlined />}>Import Sections</Button>
@@ -70,13 +109,44 @@ export const ImportExport: React.FC<IImportExport> = () => {
         </div>
       </div>
 
-      {sectionsToImport.map((section) => (
-        <div>{section.name}</div>
-      ))}
+      {!isEmpty(sectionsToImport) && (
+        <>
+          <h3>Select Sections to import</h3>
+
+          <div className="margin-bottom-1">
+            <Alert
+              message="If there is already setting with the same name - it will be overriden."
+              type="warning"
+            ></Alert>
+          </div>
+
+          {sectionsToImport.map((option) => (
+            <div>
+              <Checkbox
+                checked={option.import}
+                onChange={(e) =>
+                  setSectionsToImport(
+                    sectionsToImport.map((sectionToImport) =>
+                      sectionToImport === option
+                        ? {
+                            section: sectionToImport.section,
+                            import: e.target.checked,
+                          }
+                        : sectionToImport
+                    )
+                  )
+                }
+              >
+                {option.section.name}
+              </Checkbox>
+            </div>
+          ))}
+        </>
+      )}
 
       <div className="flex-justify-content-end margin-top-2">
         <Button
-          disabled={!sectionsToImport}
+          disabled={sectionsToImport.every((s) => !s.import)}
           type="primary"
           onClick={importSections}
         >
