@@ -2,7 +2,6 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import ReactQuill from "react-quill";
 import { SectionPage } from "../../../models";
-import { InitialLoader } from "../../InitialLoader/InitialLoader";
 import { QUILL_MODULES } from "./quill-modules";
 import "./SectionPageContent.scss";
 import { useSectionPageContent } from "./useSectionPageContent";

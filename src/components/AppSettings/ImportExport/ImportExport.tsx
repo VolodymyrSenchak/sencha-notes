@@ -8,7 +8,6 @@ import {
 } from "../../../common/utils/fileUtils";
 import { Section } from "../../../models";
 import { sectionsService } from "../../../services/sectionsService";
-import { useSectionsData } from "../../../hooks/useSectionsData";
 import { useQueryClient } from "react-query";
 import { queryKeys } from "../../../services/queryKeys";
 
@@ -26,7 +25,6 @@ export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
     []
   );
   const [messageApi, contextHolder] = message.useMessage();
-  const sectionsData = useSectionsData();
   const queryClient = useQueryClient();
 
   const onExportSectionsClicked = async () => {
