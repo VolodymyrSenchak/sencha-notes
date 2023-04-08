@@ -27,7 +27,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
   return (
     <>
       {usePageContentParams.isLoadingPageContent ? (
-        <InitialLoader />
+        <></>
       ) : (
         <div className="section-page-content height-full flex-column">
           <div className="section-page-content-name flex-align-items-center">
