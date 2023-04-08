@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { SectionContent } from "../SectionContent/SectionContent";
-import { SectionsMenu } from "../SectionsMenu";
+import { SectionsMenu } from "../SectionsMenu/SectionsMenu";
 import { NewSection } from "../SectionsMenu/NewSection";
 import { useNotesApp } from "./useNotesApp";
 import newNoteImage from "../../assets/new-note.png";
