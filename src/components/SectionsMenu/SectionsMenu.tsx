@@ -1,4 +1,11 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  AppstoreAddOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  FolderAddFilled,
+  FolderAddOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Button, Menu, MenuProps, Popover } from "antd";
 import { orderBy } from "lodash";
 import { useState } from "react";
@@ -29,14 +36,14 @@ export const SectionsMenu: React.FC<ISections> = ({
     queryKeys.sections,
     sectionsService.getSections
   );
-  const orderedSections = orderBy(
-    sectionsQuery?.data || [],
-    [s => s.displayOrder, (s) => s.createdAt]
-  );
+  const orderedSections = orderBy(sectionsQuery?.data || [], [
+    (s) => s.displayOrder,
+    (s) => s.createdAt,
+  ]);
 
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key !== activeSection?.sectionId) {
-      const section = orderedSections.find(s => s.id === e.key);
+      const section = orderedSections.find((s) => s.id === e.key);
       const [firstPage] = orderBy(section!.pages, (p) => p.index);
       setActiveSection({ sectionId: section!.id, sectionPageId: firstPage.id });
     }
@@ -67,16 +74,6 @@ export const SectionsMenu: React.FC<ISections> = ({
 
   return (
     <div className="flex-align-items-center sections-menu">
-      <Button
-        type="default"
-        title="Add new section"
-        className="add-new-section-btn"
-        onClick={onAddSection}
-        icon={<PlusOutlined />}
-      >
-        New Section
-      </Button>
-
       <Menu
         mode="horizontal"
         onClick={onClick}
@@ -94,7 +91,10 @@ export const SectionsMenu: React.FC<ISections> = ({
                   <Button
                     icon={<EditOutlined></EditOutlined>}
                     type="text"
-                    onClick={(e) => { e.stopPropagation(); editSectionClicked(section); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editSectionClicked(section);
+                    }}
                     className="width-full"
                   >
                     Edit Section
@@ -102,7 +102,10 @@ export const SectionsMenu: React.FC<ISections> = ({
                   <Button
                     icon={<DeleteOutlined />}
                     type="text"
-                    onClick={(e) => { e.stopPropagation(); onSectionDeleteClicked(section.id as string) }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSectionDeleteClicked(section.id as string);
+                    }}
                   >
                     Remove Section
                   </Button>
@@ -117,6 +120,14 @@ export const SectionsMenu: React.FC<ISections> = ({
           </Menu.Item>
         ))}
       </Menu>
+
+      <Button
+        type="text"
+        title="Add new section"
+        className="add-new-section-btn"
+        onClick={onAddSection}
+        icon={<AppstoreAddOutlined />}
+      ></Button>
 
       <AppSettings></AppSettings>
 
