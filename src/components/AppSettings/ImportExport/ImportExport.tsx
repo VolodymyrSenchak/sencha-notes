@@ -59,7 +59,6 @@ export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
       if (!Array.isArray(item.pages)) return false;
 
       for (const page of item.pages) {
-        if (isEmpty(page.name)) return false;
         if (isNil(page.content)) return false;
       }
     }

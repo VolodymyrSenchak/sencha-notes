@@ -5,13 +5,19 @@ export interface Theme {
   mode: "dark" | "light";
 }
 
-export const DEFAULT_THEME = "Light Blue";
+export const DEFAULT_THEME = "Light Default";
 
 export const APP_THEMES: Theme[] = [
   {
     name: "Light Blue",
     class: "light-blue",
     primaryColor: "#6096B4",
+    mode: "light",
+  },
+  {
+    name: "Light Default",
+    class: "light-default",
+    primaryColor: "#276678",
     mode: "light",
   },
   {
@@ -36,6 +42,12 @@ export const APP_THEMES: Theme[] = [
     name: "Dark Green",
     class: "dark-green",
     primaryColor: "#7DB9B6",
+    mode: "dark"
+  },
+  {
+    name: "Dark Blue",
+    class: "dark-blue",
+    primaryColor: "#A5C9CA",
     mode: "dark"
   }
 ];
