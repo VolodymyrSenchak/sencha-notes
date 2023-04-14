@@ -24,7 +24,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
   if (!page) return null;
 
   return (
-    <>
+    <div className={`transition-content height-full ${usePageContentParams.isLoadingPageContent ? "hidden" : ""}`}>
       {usePageContentParams.isLoadingPageContent ? (
         <></>
       ) : (
@@ -60,6 +60,6 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };

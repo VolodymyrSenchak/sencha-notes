@@ -3,3 +3,13 @@
     font-weight: 500;
     margin: 0.4rem 0;
 }
+
+.transition-content {
+    opacity: 1;
+
+    transition: opacity 0.2s ease;
+
+    &.hidden {
+        opacity: 0;
+    }
+}

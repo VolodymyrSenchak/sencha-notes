@@ -23,7 +23,7 @@ export const useSectionPageContent = ({
       setPageName(page?.name);
       setPageContent(page?.content.text);
       setIsLoadingPageContent(false);
-    });
+    }, 100);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId]);

@@ -85,7 +85,7 @@ export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
       await sectionsService.addSection(newSection);
     }
 
-    await queryClient.resetQueries(queryKeys.sections)
+    await queryClient.resetQueries(queryKeys.sections);
 
     importFinished();
   };
@@ -97,12 +97,22 @@ export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
       <div className="flex flex-gap-1">
         <div className="flex-1">
           <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Import Sections</Button>
+            <Button
+              title="Import sections from previously exported file."
+              icon={<UploadOutlined />}
+            >
+              Import Sections
+            </Button>
           </Upload>
         </div>
 
         <div className="flex-1">
-          <Button onClick={onExportSectionsClicked}>Export Sections</Button>
+          <Button
+            title="Export all sections to a file which you can import to app in other place."
+            onClick={onExportSectionsClicked}
+          >
+            Export Sections
+          </Button>
         </div>
       </div>
 

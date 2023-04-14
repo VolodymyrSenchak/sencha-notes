@@ -41,7 +41,7 @@ export const SettingsForm: React.FC<ISettingsForm> = ({ formSubmitted }) => {
       autoComplete="off"
       initialValues={initialFormData}
     >
-      <Form.Item label="Theme" name="currentTheme">
+      <Form.Item label="Theme" name="currentTheme" className="margin-bottom-1">
         <Select
           options={APP_THEMES.map((th) => ({
             value: th.name,
@@ -50,23 +50,25 @@ export const SettingsForm: React.FC<ISettingsForm> = ({ formSubmitted }) => {
         />
       </Form.Item>
 
-      <Form.Item label="App Size" name="currentSize">
-        <Select
-          options={appSizes.map((appSize) => ({
-            value: appSize,
-            label: appSize,
-          }))}
-        />
-      </Form.Item>
+      <div className="flex flex-gap-1">
+        <Form.Item label="App Size" name="currentSize" className="flex-1 margin-bottom-1">
+          <Select
+            options={appSizes.map((appSize) => ({
+              value: appSize,
+              label: appSize,
+            }))}
+          />
+        </Form.Item>
 
-      <Form.Item label="App Zoom" name="appZoom">
-        <Select
-          options={appZooms.map((zoom) => ({
-            value: zoom,
-            label: zoom,
-          }))}
-        />
-      </Form.Item>
+        <Form.Item label="App Zoom" name="appZoom" className="flex-1 margin-bottom-1">
+          <Select
+            options={appZooms.map((zoom) => ({
+              value: zoom,
+              label: zoom,
+            }))}
+          />
+        </Form.Item>
+      </div>
 
       <Form.Item>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
