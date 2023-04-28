@@ -35,6 +35,8 @@ export const useAppSettingsData = () => {
 
   const appZoom = appSettings?.appZoom || "100%";
 
+  const sectionsMenuType = appSettings?.sectionsMenuType || "menu";
+
   const setAppSettings = (value: AppSettingsModel) => {
     editAppSettingsMutator.mutate(value);
   };
@@ -44,6 +46,7 @@ export const useAppSettingsData = () => {
     appTheme,
     appSize,
     appZoom,
+    sectionsMenuType,
     setAppSettings,
   };
 };

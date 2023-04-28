@@ -77,6 +77,10 @@
   @for $i from 0 through 25 {
     &-x-#{$i} { margin-left: #{$i}rem; margin-right: #{$i}rem; }
   }
+
+  @for $i from 0 through 25 {
+    &-#{$i} { margin: #{$i}rem; }
+  }
 }
 
 @include flex-x-list;

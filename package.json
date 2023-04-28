@@ -39,6 +39,7 @@
         2,
         "prefer-double"
       ],
+      "max-len": ["error", { "code": 120 }],
       "quotes": [
         2,
         "double"
