@@ -11,6 +11,7 @@
     "@types/node": "^16.11.64",
     "@types/react-dom": "18.0.11",
     "antd": "5.3.2",
+    "highlight.js": "^11.8.0",
     "idb": "7.1.1",
     "lodash": "4.17.21",
     "react": "18.2.0",
@@ -39,7 +40,12 @@
         2,
         "prefer-double"
       ],
-      "max-len": ["error", { "code": 120 }],
+      "max-len": [
+        "error",
+        {
+          "code": 120
+        }
+      ],
       "quotes": [
         2,
         "double"
