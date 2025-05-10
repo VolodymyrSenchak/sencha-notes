@@ -11,9 +11,12 @@ $white-transparent-background-color: rgba(255, 255, 255, 0.8);
 }
 
 .sencha-app {
-  &.small-size { height: 500px; width: 650px; }
-  &.normal-size { height: 550px; width: 700px; }
-  &.large-size { height: 600px; width: 780px; }
+  height: 100vh;
+  &.app-extension {
+    &.small-size { height: 500px; width: 650px; }
+    &.normal-size { height: 550px; width: 700px; }
+    &.large-size { height: 600px; width: 780px; }
+  }
 
   &.light-blue {
     background-color: $light-blue-background;

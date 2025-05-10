@@ -3,10 +3,12 @@ import { useLayoutEffect } from "react";
 import "./App.scss";
 import { NotesApp } from "./components/NotesApp/notesApp";
 import { useAppSettingsData } from "./hooks/useAppSettingsData";
+import {ENVIRONMENT_CONFIG} from "./services";
 
 function App() {
   const { appTheme, appSize, appZoom } = useAppSettingsData();
   const algorithm = appTheme.mode === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm;
+  const appModeClass = ENVIRONMENT_CONFIG.appMode === "SITE" ? "app-site" : "app-extension";
 
   const themeConfig = {
     token: { colorPrimary: appTheme.primaryColor },
@@ -23,7 +25,7 @@ function App() {
 
   return (
     <ConfigProvider theme={themeConfig}>
-      <div className={`sencha-app ${appTheme.class} ${appSize}-size ${appTheme.mode}-mode`}>
+      <div className={`sencha-app ${appTheme.class} ${appModeClass} ${appSize}-size ${appTheme.mode}-mode`}>
         <NotesApp></NotesApp>
       </div>
     </ConfigProvider>

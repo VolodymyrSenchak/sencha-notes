@@ -27,6 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:extension": "REACT_APP_MODE=EXTENSION react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

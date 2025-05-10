@@ -1,4 +1,4 @@
-import { max, maxBy } from "lodash";
+import { max } from "lodash";
 import { useQuery } from "react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
