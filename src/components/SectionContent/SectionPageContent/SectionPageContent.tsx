@@ -1,4 +1,4 @@
-import { DeleteOutlined } from "@ant-design/icons";
+import {DeleteOutlined, DownloadOutlined} from "@ant-design/icons";
 import { Button, Input } from "antd";
 import ReactQuill from "react-quill";
 import { SectionPage } from "../../../models";
@@ -38,6 +38,14 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
               value={usePageContentParams.pageName}
               onChange={(e) => usePageContentParams.setPageName(e.target.value)}
             ></Input>
+
+            <Button
+              type="text"
+              size="large"
+              title="Download this page"
+              icon={<DownloadOutlined />}
+              onClick={() => usePageContentParams.handlePageDownload()}
+            ></Button>
 
             <Button
               type="text"

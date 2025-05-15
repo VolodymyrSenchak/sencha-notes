@@ -23,6 +23,17 @@ export const SectionContent: React.FC<ISectionContent> = () => {
     <section className="section-details">
       <div className="section-content">
         <div className="section-pages flex-column">
+          <div className="flex-justify-content-end flex-align-items-center width-full ">
+            <Button
+              type="default"
+              size="middle"
+              title="Add new page"
+              className="flex-1 margin-x-1 margin-top-1"
+              onClick={addNewPage}
+            >
+              New Page
+            </Button>
+          </div>
           <div className="section-pages-menu flex-1">
             <SectionPagesMenu
               selectedPage={currentPage!}
@@ -31,19 +42,6 @@ export const SectionContent: React.FC<ISectionContent> = () => {
               onPagesOrderChanged={handlePagesOrderChanged}
               onPageDelete={handlePageDeletion}
             />
-          </div>
-
-          <div className="flex-justify-content-end flex-align-items-center width-full ">
-            <Button
-              type="primary"
-              size="middle"
-              title="Add new page"
-              className="flex-1 margin-x-1 margin-bottom-1"
-              icon={<PlusOutlined />}
-              onClick={addNewPage}
-            >
-              New Page
-            </Button>
           </div>
         </div>
 

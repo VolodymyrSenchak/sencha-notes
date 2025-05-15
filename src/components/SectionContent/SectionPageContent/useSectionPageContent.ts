@@ -46,11 +46,21 @@ export const useSectionPageContent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageContent]);
 
+  const handlePageDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([pageContent], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = `${pageName}.html`;
+    document.body.appendChild(element);
+    element.click();
+  };
+
   return {
     pageName,
     pageContent,
     isLoadingPageContent,
     setPageName,
     setPageContent,
+    handlePageDownload,
   };
 };

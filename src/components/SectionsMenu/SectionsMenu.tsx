@@ -72,12 +72,11 @@ export const SectionsMenu: React.FC<ISections> = ({
       )}
 
       <Button
-        type="text"
-        title="Add new section"
+        type="default"
+        title="Add section"
         className="add-new-section-btn"
         onClick={onAddSection}
-        icon={<AppstoreAddOutlined />}
-      ></Button>
+      >Add section</Button>
 
       <AppSettings></AppSettings>
 
