@@ -1,8 +1,9 @@
+import "./highlight"; // Import highlight.js first before ReactQuill
 import {DeleteOutlined, DownloadOutlined} from "@ant-design/icons";
 import { Button, Input } from "antd";
-import ReactQuill from "react-quill";
-import { SectionPage } from "../../../models";
 import { QUILL_MODULES } from "./quill-modules";
+import ReactQuill from "react-quill-new";
+import { SectionPage } from "../../../models";
 import "./SectionPageContent.scss";
 import { useSectionPageContent } from "./useSectionPageContent";
 
@@ -34,7 +35,7 @@ export const SectionPageContent: React.FC<ISectionPageContent> = ({
               className="page-title-editor"
               placeholder="Enter page name here"
               size="large"
-              bordered={false}
+              variant="borderless"
               value={usePageContentParams.pageName}
               onChange={(e) => usePageContentParams.setPageName(e.target.value)}
             ></Input>
