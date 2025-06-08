@@ -1,5 +1,5 @@
 import { max } from "lodash";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { v4 } from "uuid";
 import { useSectionsData } from "../../hooks/useSectionsData";
 import { useActiveSectionData } from "../../hooks/useSectionSelection";

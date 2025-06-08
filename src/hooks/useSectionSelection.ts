@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../services/queryKeys";
 
 export interface ActiveSection {
@@ -11,13 +11,13 @@ const ACTIVE_SECTION_KEY = "active-section";
 export const useActiveSectionData = () => {
   const queryClient = useQueryClient();
 
-  const selectedSectionQuery = useQuery<ActiveSection>(
-    [queryKeys.activeSection, ACTIVE_SECTION_KEY],
-    () => {
+  const selectedSectionQuery = useQuery<ActiveSection>({
+    queryKey: [queryKeys.activeSection, ACTIVE_SECTION_KEY],
+    queryFn: () => {
       const activeSectionJson = localStorage.getItem(ACTIVE_SECTION_KEY);
       return activeSectionJson ? JSON.parse(activeSectionJson) : undefined;
     }
-  );
+  });
 
   const editSectionDetailsMutator = useMutation({
     mutationFn: (activeSection: ActiveSection) => {

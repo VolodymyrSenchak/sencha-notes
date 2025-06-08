@@ -1,8 +1,7 @@
-import { AppstoreAddOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { orderBy } from "lodash";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useActiveSectionData } from "../../hooks/useSectionSelection";
 import { Section } from "../../models";
 import { queryKeys } from "../../services/queryKeys";
@@ -27,10 +26,10 @@ export const SectionsMenu: React.FC<ISections> = ({
   const { sectionsMenuType } = useAppSettingsData();
   const { activeSection, setActiveSection } = useActiveSectionData();
 
-  const sectionsQuery = useQuery(
-    queryKeys.sections,
-    sectionsService.getSections
-  );
+  const sectionsQuery = useQuery({
+    queryKey: [queryKeys.sections],
+    queryFn: sectionsService.getSections
+  });
 
   const orderedSections = orderBy(sectionsQuery?.data || [], [
     (s) => s.displayOrder,

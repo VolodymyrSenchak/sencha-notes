@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal } from "antd";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../services/queryKeys";
 import { sectionsService } from "../../../services/sectionsService";
 
@@ -18,10 +18,10 @@ export const NewSection: React.FC<INewSection> = ({
   cancel,
   submit,
 }) => {
-  const { data: sections } = useQuery(
-    queryKeys.sections,
-    sectionsService.getSections
-  );
+  const { data: sections } = useQuery({
+    queryKey: [queryKeys.sections],
+    queryFn: () => sectionsService.getSections(),
+  });
 
   const onFinish = (data: NewSectionFormData) => {
     submit(data.sectionName);

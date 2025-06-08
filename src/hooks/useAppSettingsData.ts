@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AppSettingsModel } from "../models";
 import {
   appSettingsService,
@@ -10,10 +10,10 @@ import { APP_THEMES, DEFAULT_THEME } from "../services/themes";
 export const useAppSettingsData = () => {
   const queryClient = useQueryClient();
 
-  const appSettingsQuery = useQuery<AppSettingsModel>(
-    [queryKeys.appSettings, APP_SETTINGS_KEY],
-    () => appSettingsService.getAppSettings()
-  );
+  const appSettingsQuery = useQuery<AppSettingsModel>({
+    queryKey: [queryKeys.appSettings, APP_SETTINGS_KEY],
+    queryFn: () => appSettingsService.getAppSettings()
+  });
 
   const editAppSettingsMutator = useMutation({
     mutationFn: (appSettings: AppSettingsModel) => {

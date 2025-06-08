@@ -1,38 +1,47 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Section } from "../models";
 import { queryKeys } from "../services/queryKeys";
 import { sectionsService } from "../services/sectionsService";
 
 export const useSectionsData = () => {
   const queryClient = useQueryClient();
-  const sectionsQuery = useQuery(queryKeys.sections, sectionsService.getSections);
+  const sectionsQuery = useQuery({
+    queryKey: [queryKeys.sections],
+    queryFn: sectionsService.getSections
+  });
 
   const isSectionsLoading = sectionsQuery.isLoading;
   const sections = sectionsQuery.data;
 
+  const removeSectionsQueries = () => {
+    queryClient.removeQueries({ queryKey: [queryKeys.sections], exact: true });
+  };
+
+  const resetSectionsQueries = () => {
+    queryClient.removeQueries({ queryKey: [queryKeys.sections], exact: true });
+  };
+
   const editSectionMutator = useMutation({
     mutationFn: (sc: Section) => sectionsService.editSection(sc),
-    onSuccess: () => {
-      queryClient.resetQueries(queryKeys.sections);
-    }
+    onSuccess: () => resetSectionsQueries()
   });
 
   const editSectionDetailsMutator = useMutation({
     mutationFn: (sc: Section) => sectionsService.editSection(sc),
     onSuccess: ([key, sc]) => {
-      queryClient.removeQueries(queryKeys.sections);
+      removeSectionsQueries();
       queryClient.setQueryData([queryKeys.sections, key], sc);
     }
   });
 
   const deleteSectionMutator = useMutation({
     mutationFn: (key: string) => sectionsService.deleteSection(key),
-    onSuccess: () => queryClient.removeQueries(queryKeys.sections),
+    onSuccess: () => removeSectionsQueries(),
   });
 
   const addSectionMutator = useMutation({
     mutationFn: (key: Section) => sectionsService.addSection(key),
-    onSuccess: () => queryClient.resetQueries(queryKeys.sections),
+    onSuccess: () => resetSectionsQueries(),
   });
 
   return {

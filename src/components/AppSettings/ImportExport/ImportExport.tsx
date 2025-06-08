@@ -8,7 +8,7 @@ import {
 } from "../../../common/utils/fileUtils";
 import { Section } from "../../../models";
 import { sectionsService } from "../../../services/sectionsService";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../services/queryKeys";
 
 interface IImportExport {
@@ -85,7 +85,7 @@ export const ImportExport: React.FC<IImportExport> = ({ importFinished }) => {
       await sectionsService.addSection(newSection);
     }
 
-    await queryClient.resetQueries(queryKeys.sections);
+    await queryClient.resetQueries({ queryKey: [queryKeys.sections], exact: true });
 
     importFinished();
   };
