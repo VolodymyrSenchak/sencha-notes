@@ -3,7 +3,7 @@ import { ActiveSection } from "../models";
 export const ACTIVE_SECTION_KEY = "active-section";
 
 export const activeSectionService = {
-  getActiveSection: (): ActiveSection => {
+  getActiveSection: (): ActiveSection | undefined => {
     const activeSectionJson = localStorage.getItem(ACTIVE_SECTION_KEY);
     return activeSectionJson ? JSON.parse(activeSectionJson) : undefined;
   },

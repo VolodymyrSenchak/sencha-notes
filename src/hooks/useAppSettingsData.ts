@@ -10,7 +10,7 @@ import { APP_THEMES, DEFAULT_THEME } from "../services/themes";
 export const useAppSettingsData = () => {
   const queryClient = useQueryClient();
 
-  const appSettingsQuery = useQuery<AppSettingsModel>({
+  const appSettingsQuery = useQuery<AppSettingsModel | null>({
     queryKey: [queryKeys.appSettings, APP_SETTINGS_KEY],
     queryFn: () => appSettingsService.getAppSettings()
   });
