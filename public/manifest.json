@@ -1,29 +1,35 @@
 {
   "manifest_version": 3,
-  "name": "Volo Notes",
-  "version": "1.2.1.0",
-  "description": "Nice app for adding notes and strucuring them by sections with multiple pages.",
+  "name": "SenNotes",
+  "version": "2.0.0.0",
+  "description": "Unlimited notes in your toolbar. Organize them into sections, find anything with instant search, and keep it all on your device.",
   "background": {
     "service_worker": "./background.js"
   },
   "permissions": [],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Alt+Shift+N" },
+      "description": "Open SenNotes"
+    }
+  },
   "author": "Volodymyr Senchak",
   "homepage_url": "https://github.com/VolodymyrSenchak",
-  "short_name": "Volo Notes",
+  "short_name": "SenNotes",
   "action": {
     "default_popup": "index.html",
-    "default_title": "Volo Notes",
+    "default_title": "SenNotes",
     "default_icon": {
-      "16": "/logo.png",
-      "32": "/logo.png",
-      "48": "/logo.png",
-      "128": "/logo.png"
+      "16": "/icons/icon-16.png",
+      "32": "/icons/icon-32.png",
+      "48": "/icons/icon-48.png",
+      "128": "/icons/icon-128.png"
     }
   },
   "icons": {
-    "16": "/logo.png",
-    "32": "/logo.png",
-    "48": "/logo.png",
-    "128": "/logo.png"
+    "16": "/icons/icon-16.png",
+    "32": "/icons/icon-32.png",
+    "48": "/icons/icon-48.png",
+    "128": "/icons/icon-128.png"
   }
 }

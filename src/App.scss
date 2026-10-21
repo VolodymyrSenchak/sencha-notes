@@ -1,9 +1,1 @@
-.sencha-app {
-  display: flex;
-  flex-direction: column;
-
-  &-content {
-    height: 0;
-    flex: 1;
-  }
-}
+// App-level layout lives in styles/global.scss (.vn-app); components style themselves.

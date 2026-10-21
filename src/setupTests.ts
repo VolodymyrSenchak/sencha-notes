@@ -2,4 +2,10 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
+import { webcrypto } from "crypto";
+
+// jsdom has no Web Crypto; uuid needs crypto.randomUUID / getRandomValues.
+if (!(globalThis as any).crypto) {
+  Object.defineProperty(globalThis, "crypto", { value: webcrypto });
+}
