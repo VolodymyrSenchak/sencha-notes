@@ -1,5 +1,2 @@
-@import './quill-overrides.scss';
-
-@import './common.scss';
-@import './global.scss';
-@import './themes.scss';
+@use "./tokens.scss";
+@use "./global.scss";

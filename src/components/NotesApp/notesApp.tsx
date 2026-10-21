@@ -1,49 +1,96 @@
-import { Button } from "antd";
-import { SectionContent } from "../SectionContent/SectionContent";
-import { SectionsMenu } from "../SectionsMenu/SectionsMenu";
-import { NewSection } from "../SectionsMenu/NewSection";
-import { useNotesApp } from "./useNotesApp";
-import newNoteImage from "../../assets/new-note.png";
+import { useEffect, useRef } from "react";
+import { isPageBlank, orderPages } from "../../common/utils/notes";
+import { useAppSettingsData } from "../../hooks/useAppSettingsData";
+import { Editor } from "../Editor/Editor";
+import { SearchPalette } from "../SearchPalette/SearchPalette";
+import { SettingsSheet } from "../Settings/SettingsSheet";
+import { Sidebar } from "../Sidebar/Sidebar";
+import { ConfirmDialog, Toast } from "../ui/Feedback";
+import { Menu } from "../ui/Menu";
+import { NotesProvider, useNotes } from "./NotesContext";
 import "./NotesApp.scss";
-import { InitialLoader } from "../InitialLoader/InitialLoader";
 
-export const NotesApp: React.FC = () => {
-  const useNotesAppData = useNotesApp();
+export const NotesApp: React.FC = () => (
+  <NotesProvider>
+    <NotesLayout />
+  </NotesProvider>
+);
 
-  if (useNotesAppData.isSectionsLoading) {
-    return <InitialLoader />;
+const NotesLayout: React.FC = () => {
+  const app = useNotes();
+  const { store } = app;
+  const { appSettings } = useAppSettingsData();
+  const booted = useRef(false);
+
+  // First run creates an Inbox with one empty note; "open on new note" reuses a blank Inbox note.
+  useEffect(() => {
+    if (store.isLoading || store.isError || booted.current) return;
+    booted.current = true;
+
+    if (store.sections.length === 0) {
+      app.newNote();
+      return;
+    }
+    if (appSettings.openOn === "new") {
+      const inbox = store.sections.find((s) => s.isInbox);
+      const [newest] = inbox ? orderPages(inbox.pages) : [];
+      if (inbox && newest && isPageBlank(newest)) app.openNote(inbox, newest);
+      else app.newNote();
+    }
+  }, [store.isLoading, store.isError, store.sections, appSettings.openOn, app]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.ctrlKey || e.metaKey;
+      if (mod && !e.altKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        app.closeMenu();
+        app.setOverlay(app.overlay === "search" ? null : "search");
+      } else if (e.altKey && !mod && !e.shiftKey && e.code === "KeyN") {
+        // Ctrl+N is reserved by Chrome, so new note is Alt+N.
+        e.preventDefault();
+        app.newNote();
+      } else if (e.key === "Escape" && app.overlay && !app.confirm) {
+        app.setOverlay(null);
+      }
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
+  }, [app]);
+
+  if (store.isLoading) {
+    return <div className="vn-loading">Loading…</div>;
+  }
+
+  if (store.isError) {
+    return (
+      <div className="vn-loading" role="alert">
+        Couldn’t open your notes. Close and reopen SenNotes — nothing has been changed.
+      </div>
+    );
   }
 
   return (
     <>
-      {useNotesAppData.activeSection && useNotesAppData.isAnySectionExist ? (
-        <>
-          <header className="sencha-app-header">
-            <SectionsMenu
-              onAddSection={useNotesAppData.openNewSectionModal}
-              onSectionDeleteCalled={useNotesAppData.handleSectionDelete}
-            />
-          </header>
+      <Sidebar />
+      <Editor />
 
-          <main className="sencha-app-content">
-            <SectionContent />
-          </main>
-        </>
-      ) : (
-        <div className="add-new-note-content">
-          <img alt="New Note" src={newNoteImage}></img>
-
-          <Button type="primary" onClick={useNotesAppData.openNewSectionModal}>
-            Add your first notes
-          </Button>
-        </div>
+      {app.overlay === "search" && <SearchPalette />}
+      {app.overlay === "settings" && <SettingsSheet />}
+      {app.menu && <Menu {...app.menu} onClose={app.closeMenu} />}
+      {app.confirm && <ConfirmDialog {...app.confirm} onCancel={() => app.setConfirm(null)} />}
+      {app.toast && (
+        <Toast
+          key={app.toast.id}
+          message={app.toast.message}
+          actionLabel={app.toast.undo ? "Undo" : undefined}
+          onAction={() => {
+            app.toast?.undo?.();
+            app.dismissToast();
+          }}
+          onDismiss={app.dismissToast}
+        />
       )}
-
-      <NewSection
-        isModalOpened={useNotesAppData.isAddSectionOpened}
-        cancel={useNotesAppData.closeNewSectionModal}
-        submit={useNotesAppData.handleNewSectionAdded}
-      ></NewSection>
     </>
   );
 };

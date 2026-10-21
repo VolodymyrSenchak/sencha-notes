@@ -1,0 +1,197 @@
+/*
+ * SenNotes — design tokens
+ * Copied from design/tokens/tokens.css (fonts are bundled locally instead of Google Fonts). Theme: data-theme="light|dark" on <html> (falls back to
+ * prefers-color-scheme when absent). Accent: data-accent="tea|teal|blue|clay|plum".
+ */
+
+
+:root {
+  /* Colour — light */
+  --vn-bg: #FFFFFF;
+  --vn-sidebar: #F5F5F2;
+  --vn-border: #E4E4DF;
+  --vn-border-subtle: #ECECE8;
+  --vn-text: #1C1F1D;
+  --vn-text-secondary: #4C514E;
+  --vn-text-tertiary: #666B67;
+  --vn-placeholder: #747875;
+  --vn-hover: #ECECE7;
+  --vn-selected: #FFFFFF;
+  --vn-field: #FFFFFF;
+  --vn-code-bg: #F5F5F2;
+  --vn-kbd-bg: #ECECE8;
+  --vn-segmented-bg: #F0F0EC;
+  --vn-mark: #FBE7A1;
+  --vn-result-active: color-mix(in srgb, var(--vn-accent) 8%, var(--vn-bg));
+  --vn-scrim: rgba(22, 24, 23, 0.34);
+  --vn-on-accent: #FFFFFF;
+  --vn-danger: #B5443A;
+  --vn-danger-text: #B5443A;
+  --vn-accent-soft: color-mix(in srgb, var(--vn-accent) 10%, transparent);
+  --vn-shadow-selected: 0 0 0 1px #E4E4DF, 0 1px 2px rgba(20, 22, 21, 0.06);
+  color-scheme: light;
+
+  /* Accent (default: tea) */
+  --vn-accent: #2F7A55;
+
+  /* Section dots */
+  --vn-section-gray: #8C918E;
+  --vn-section-blue: #3D6FB0;
+  --vn-section-plum: #74509F;
+  --vn-section-orange: #B5652F;
+  --vn-section-green: #2F7A55;
+  --vn-section-olive: #8A7A2E;
+  --vn-section-red: #B5443A;
+  --vn-section-teal: #276678;
+
+  /* Type */
+  --vn-font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vn-font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --vn-fs-kbd: 10.5px;
+  --vn-fs-label: 11.5px;
+  --vn-fs-meta: 12px;
+  --vn-fs-control: 12.5px;
+  --vn-fs-ui: 13px;
+  --vn-fs-body: 13.5px;
+  --vn-fs-heading: 14px;
+  --vn-fs-dialog: 15px;
+  --vn-fs-title: 22px;
+  --vn-lh-ui: 1.45;
+  --vn-lh-body: 1.6;
+  --vn-lh-title: 1.3;
+
+  /* Space */
+  --vn-space-1: 2px;
+  --vn-space-2: 4px;
+  --vn-space-3: 6px;
+  --vn-space-4: 8px;
+  --vn-space-5: 10px;
+  --vn-space-6: 12px;
+  --vn-space-7: 14px;
+  --vn-space-8: 16px;
+  --vn-space-9: 20px;
+  --vn-space-10: 24px;
+  --vn-space-11: 28px;
+
+  /* Radius */
+  --vn-radius-xs: 3px;
+  --vn-radius-sm: 4px;
+  --vn-radius-md: 6px;
+  --vn-radius-lg: 7px;
+  --vn-radius-xl: 8px;
+  --vn-radius-2xl: 9px;
+  --vn-radius-3xl: 12px;
+  --vn-radius-pill: 999px;
+
+  /* Shadow */
+  --vn-shadow-segment: 0 1px 2px rgba(20, 22, 21, 0.12), 0 0 0 1px rgba(20, 22, 21, 0.04);
+  --vn-shadow-palette: 0 0 0 1px rgba(20, 22, 21, 0.08), 0 24px 60px rgba(20, 22, 21, 0.22);
+  --vn-shadow-sheet: -1px 0 0 rgba(20, 22, 21, 0.08), -16px 0 40px rgba(20, 22, 21, 0.16);
+
+  /* Layout */
+  --vn-popup-w: 700px;
+  --vn-popup-h: 550px;
+  --vn-sidebar-w: 214px;
+  --vn-topbar-h: 46px;
+  --vn-row-h: 28px;
+  --vn-field-h: 32px;
+  --vn-icon-btn: 28px;
+  --vn-editor-px: 28px;
+  --vn-palette-w: 520px;
+  --vn-sheet-w: 340px;
+
+  /* Motion */
+  --vn-dur-fast: 120ms;
+  --vn-dur-base: 180ms;
+  --vn-dur-sheet: 220ms;
+  --vn-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Popup sizes */
+:root[data-size="compact"] { --vn-popup-w: 650px; --vn-popup-h: 500px; }
+:root[data-size="roomy"]   { --vn-popup-w: 780px; --vn-popup-h: 600px; }
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --vn-bg: #161817;
+    --vn-sidebar: #1C1F1E;
+    --vn-border: #2D3130;
+    --vn-border-subtle: #262A28;
+    --vn-text: #ECEEEC;
+    --vn-text-secondary: #BCC1BE;
+    --vn-text-tertiary: #959B97;
+    --vn-placeholder: #8A908C;
+    --vn-hover: #252927;
+    --vn-selected: #2A2E2C;
+    --vn-field: #232726;
+    --vn-code-bg: #202423;
+    --vn-kbd-bg: #2D3230;
+    --vn-segmented-bg: #232726;
+    --vn-mark: rgba(251, 231, 161, 0.28);
+    --vn-result-active: color-mix(in srgb, var(--vn-accent) 14%, var(--vn-bg));
+    --vn-scrim: rgba(0, 0, 0, 0.5);
+    --vn-on-accent: #0E1712;
+    --vn-danger: #B5443A;
+    --vn-danger-text: #F0938A;
+    --vn-accent-soft: color-mix(in srgb, var(--vn-accent) 16%, transparent);
+    --vn-shadow-selected: 0 0 0 1px #343937;
+    --vn-shadow-palette: 0 0 0 1px #343937, 0 24px 60px rgba(0, 0, 0, 0.55);
+    --vn-shadow-sheet: -1px 0 0 #343937, -16px 0 40px rgba(0, 0, 0, 0.45);
+    --vn-accent: #7CC9A0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --vn-bg: #161817;
+  --vn-sidebar: #1C1F1E;
+  --vn-border: #2D3130;
+  --vn-border-subtle: #262A28;
+  --vn-text: #ECEEEC;
+  --vn-text-secondary: #BCC1BE;
+  --vn-text-tertiary: #959B97;
+  --vn-placeholder: #8A908C;
+  --vn-hover: #252927;
+  --vn-selected: #2A2E2C;
+  --vn-field: #232726;
+  --vn-code-bg: #202423;
+  --vn-kbd-bg: #2D3230;
+  --vn-segmented-bg: #232726;
+  --vn-mark: rgba(251, 231, 161, 0.28);
+  --vn-result-active: color-mix(in srgb, var(--vn-accent) 14%, var(--vn-bg));
+  --vn-scrim: rgba(0, 0, 0, 0.5);
+  --vn-on-accent: #0E1712;
+  --vn-danger: #B5443A;
+  --vn-danger-text: #F0938A;
+  --vn-accent-soft: color-mix(in srgb, var(--vn-accent) 16%, transparent);
+  --vn-shadow-selected: 0 0 0 1px #343937;
+  --vn-shadow-palette: 0 0 0 1px #343937, 0 24px 60px rgba(0, 0, 0, 0.55);
+  --vn-shadow-sheet: -1px 0 0 #343937, -16px 0 40px rgba(0, 0, 0, 0.45);
+  --vn-accent: #7CC9A0;
+  color-scheme: dark;
+}
+
+/* Accents — light values */
+:root[data-accent="tea"]  { --vn-accent: #2F7A55; }
+:root[data-accent="teal"] { --vn-accent: #276678; }
+:root[data-accent="blue"] { --vn-accent: #3D6FB0; }
+:root[data-accent="clay"] { --vn-accent: #9A6440; }
+:root[data-accent="plum"] { --vn-accent: #74509F; }
+
+/* Accents — dark values */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-accent="tea"]  { --vn-accent: #7CC9A0; }
+  :root:not([data-theme="light"])[data-accent="teal"] { --vn-accent: #7DBBCB; }
+  :root:not([data-theme="light"])[data-accent="blue"] { --vn-accent: #8DB6EA; }
+  :root:not([data-theme="light"])[data-accent="clay"] { --vn-accent: #D9A77F; }
+  :root:not([data-theme="light"])[data-accent="plum"] { --vn-accent: #B99DE2; }
+}
+:root[data-theme="dark"][data-accent="tea"]  { --vn-accent: #7CC9A0; }
+:root[data-theme="dark"][data-accent="teal"] { --vn-accent: #7DBBCB; }
+:root[data-theme="dark"][data-accent="blue"] { --vn-accent: #8DB6EA; }
+:root[data-theme="dark"][data-accent="clay"] { --vn-accent: #D9A77F; }
+:root[data-theme="dark"][data-accent="plum"] { --vn-accent: #B99DE2; }
+
+:root {
+  --vn-text-zoom: 1;
+}
